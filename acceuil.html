@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FODESE - Plateforme de Stages et d'Emploi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @keyframes backgroundSlide {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .animated-background {
+            background-size: cover;
+            background-position: center;
+            animation: backgroundSlide 20s ease infinite;
+        }
+        .event-capsule {
+            transition: all 0.3s ease;
+        }
+        .event-capsule:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(100, 26, 11, 0.2);
+        }
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 */
+            height: 0;
+            overflow: hidden;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 82, 45, 0.8);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .play-button i {
+            color: #FEEBC0;
+            font-size: 24px;
+            margin-left: 5px;
+        }
+        /* Menu déroulant */
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            min-width: 200px;
+            z-index: 1000;
+        }
+        /* Animation menu mobile */
+        .mobile-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .mobile-menu.open {
+            max-height: 500px;
+        }
+        a {
+            color: #ffffff;
+        }
+        
+        /* Animation scroll */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Marquee animation */
+        .marquee-container {
+            overflow: hidden;
+            white-space: nowrap;
+            background-color: #641A0B;
+            color: #ffffff;
+            margin-top: 1rem;
+            border-radius: 0.5rem;
+        }
+        
+        .marquee {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marquee 30s linear infinite;
+        }
+        .marquee span{
+            font-size: 30px;
+        }
+        
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+        
+        /* Parrains section */
+        .parrain-card {
+            transition: all 0.3s ease;
+            transform: scale(0.95);
+        }
+        
+        .parrain-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(100, 26, 11, 0.3);
+        }
+        
+        .parrain-card.visible {
+            animation: cardAppear 0.6s ease-out forwards;
+        }
+        
+        @keyframes cardAppear {
+            0% { opacity: 0; transform: translateY(20px) scale(0.95); }
+            100% { opacity: 1; transform: translateY(0) scale(0.95); }
+        }
+        
+        /* Main content width */
+        .main-content-container {
+            width: 90%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        /* Stats section */
+        .stats-item {
+            transition: all 0.3s ease;
+        }
+        .stats-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        /* Wave effect */
+        .wave-effect {
+            position: relative;
+            overflow: hidden;
+        }
+        .wave-effect::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.1)" d="M0,192L48,197.3C96,203,192,213,288,229.3C384,245,480,267,576,250.7C672,235,768,181,864,181.3C960,181,1056,235,1152,234.7C1248,235,1344,181,1392,154.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+            background-size: cover;
+            background-position: bottom;
+            opacity: 0.5;
+            z-index: 0;
+        }
+        .wave-content {
+            position: relative;
+            z-index: 1;
+        }
+        .testimonial-slider {
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE/Edge */
+        }
+        .testimonial-slider::-webkit-scrollbar {
+            display: none; /* Chrome/Safari */
+        }
+        
+        .testimonial-slide {
+            transition: transform 0.5s ease, opacity 0.5s ease;
+            box-sizing: border-box;
+        }
+        
+        @media (min-width: 768px) {
+            .testimonial-slide {
+                min-width: calc(50% - 1rem);
+            }
+        }
+        
+        /* Loading animation */
+        .loader {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid #FF522D;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Back to top button */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #FF522D;
+            color: #ffffff;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 999;
+        }
+        
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* Form input animation */
+        .form-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px #FF522D;
+        }
+        
+        /* Pulse animation for CTA */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+        }
+        
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 120px;
+            background-color: #641A0B;
+            color: #FEEBC0;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+        .partners-container {
+        position: relative;
+        padding: 0 40px; /* Espace pour les boutons */
+    }
+    
+    .partners-slide {
+        animation: scroll 20s linear infinite;
+        width: calc(150px * 6); /* Largeur totale des logos */
+    }
+    
+    @keyframes scroll {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(calc(-150px * 3)); }
+    }
+    
+    .partner-item {
+        transition: transform 0.3s;
+    }
+    
+    .partner-item:hover {
+        transform: scale(1.1);
+    }
+    </style>
+</head>
+<body class="bg-[#FEEBC0]">
+    <!-- Loading Screen -->
+     <div id="loading-screen" class="fixed inset-0 bg-[#641A0B] flex items-center justify-center z-[9999] transition-opacity duration-500">
+        <div class="text-center">
+            <img src="logo png/Logo-FODESE---blanc.png" alt="FODESE Logo" class="h-20 mb-4 mx-auto">
+            <div class="loader mx-auto"></div>
+            <p class="text-[#FEEBC0] mt-4">Chargement en cours...</p>
+        </div>
+    </div>
+
+    <!-- Back to Top Button -->
+    <div id="back-to-top" class="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <!-- Navigation -->
+    <div class="bg-[#641A0B] sticky top-0 z-50 shadow-lg">
+        <div class="container mx-auto px-4">
+            <nav class="flex items-center justify-between py-3">
+                <a href="#" class="flex items-center">
+                    <img src="logo png/Logo-FODESE---blanc.png" alt="FODESE Logo" class="h-10">
+                </a>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden lg:flex items-center space-x-1">
+                    <ul class="flex items-center space-x-1">
+                        <li><a href="#" class="text-[#ffffff] hover:text-[#FF522D] px-3 py-2 font-medium flex items-center transition">ACCUEIL</a></li>
+                        
+                        <li class="relative group">
+                            <a href="apropos.html" class="text-[#ffffff] hover:text-[#FF522D] px-3 py-2 font-medium flex items-center transition">
+                                À PROPOS <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                            </a>
+                            <div class="dropdown-menu hidden group-hover:block bg-[#7A2B1A] rounded-md shadow-lg">
+                                <ul class="py-2">
+                                    <li><a href="apropos.html " class="block px-4 py-2 text-[#ffffff] hover:bg-[#FF522D]">Pourquoi nous rejoindre ?</a></li>
+                                    <li><a href="apropos.html" class="block px-4 py-2 text-[#ffffff] hover:bg-[#FF522D]">Présentation FODESE</a></li>
+                                    <li><a href="apropos.html" class="block px-4 py-2 text-[#ffffff] hover:bg-[#FF522D]">Éditions passées</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        
+                        <li class="relative group">
+                            <a href="offres.html" class="text-[#ffffff] hover:text-[#FF522D] px-3 py-2 font-medium flex items-center transition">
+                                OFFRES <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                            </a>
+                            <div class="dropdown-menu hidden group-hover:block bg-[#7A2B1A] rounded-md shadow-lg">
+                                <ul class="py-2">
+                                    <li><a href="offres.html?type=stage" class="block px-4 py-2 text-[#ffffff] hover:bg-[#FF522D]">Stages</a></li>
+                                    <li><a href="offres.html?type=emploi" class="block px-4 py-2 text-[#ffffff] hover:bg-[#FF522D]">Emplois</a></li>
+                                    <li><a href="offres.html?type=alternance" class="block px-4 py-2 text-[#ffffff] hover:bg-[#FF522D]">Alternance</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        
+                        <li class="relative group">
+                            <a href="programme.html" class="text-[#ffffff] hover:text-[#FF522D] px-3 py-2 font-medium flex items-center transition">
+                                PROGRAMMES <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                            </a>
+                            <div class="dropdown-menu hidden group-hover:block bg-[#7A2B1A] rounded-md shadow-lg">
+                                <ul class="py-2">
+                                    <li><a href="programme.html" class="block px-4 py-2 text-[#ffffff] hover:bg-[#FF522D]">Forums des stages</a></li>
+                                    <li><a href="programme.html" class="block px-4 py-2 text-[#ffffff] hover:bg-[#FF522D]">Conférences carrières</a></li>
+                                    <li><a href="programme.html?type=conseils" class="block px-4 py-2 text-[#ffffff] hover:bg-[#FF522D]">Ateliers de préparation</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        
+                        <li><a href="#" class="text-[#ffffff] hover:text-[#FF522D] px-3 py-2 font-medium flex items-center transition">ACTUALITÉS</a></li>
+                        <li><a href="#parrin" class="text-[#ffffff] hover:text-[#FF522D] px-3 py-2 font-medium flex items-center transition">PARTENAIRES</a></li>
+                    </ul>
+                    
+                    <div class="ml-4 relative group">
+                        <button id="join-button" class="bg-[#FF522D] hover:bg-[#FA7845] text-[#FEEBC0] font-bold px-4 py-2 rounded-lg flex items-center transition pulse-animation">
+                           <a href="inscript.html"><i class="fas fa-user-plus mr-2"></i> REJOIGNEZ-NOUS</a> 
+                            <i class="fas fa-chevron-down ml-2 text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <button id="mobile-menu-button" class="lg:hidden text-[#FEEBC0] focus:outline-none">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </nav>
+        </div>
+        
+        <div id="mobile-menu" class="mobile-menu lg:hidden bg-[#7A2B1A]">
+            <div class="container mx-auto px-4 py-2">
+                <ul class="space-y-2">
+                    <li><a href="#" class="block py-2 px-3 text-[#FEEBC0] hover:bg-[#FF522D] rounded transition">ACCUEIL</a></li>
+                    
+                    <li>
+                        <details class="group">
+                            <summary class="flex justify-between items-center py-2 px-3 text-[#FEEBC0] hover:bg-[#FF522D] rounded transition cursor-pointer">
+                                À PROPOS
+                                <i class="fas fa-chevron-down text-xs group-open:rotate-180 transition-transform"></i>
+                            </summary>
+                            <ul class="ml-4 mt-1 space-y-1">
+                                <li><a href="apropos.html" class="block py-2 px-3 text-[#FEEBC0] hover:bg-[#FF522D] rounded transition">Pourquoi nous rejoindre ?</a></li>
+                                <li><a href="apropos.html" class="block py-2 px-3 text-[#FEEBC0] hover:bg-[#FF522D] rounded transition">Présentation FODESE</a></li>
+                                <li><a href="apropos.html" class="block py-2 px-3 text-[#FEEBC0] hover:bg-[#FF522D] rounded transition">Éditions passées</a></li>
+                            </ul>
+                        </details>
+                    </li>
+                    
+                    <li>
+                        <details class="group">
+                            <summary class="flex justify-between items-center py-2 px-3 text-[#FEEBC0] hover:bg-[#FF522D] rounded transition cursor-pointer">
+                                OFFRES
+                                <i class="fas fa-chevron-down text-xs group-open:rotate-180 transition-transform"></i>
+                            </summary>
+                            <ul class="ml-4 mt-1 space-y-1">
+                                <li><a href="offres-1.html #tab-internships" class="block py-2 px-3 text-[#FEEBC0] hover:bg-[#FF522D] rounded transition">Stages</a></li>
+                                <li><a href="offres-1.html #tab-jobs" class="block py-2 px-3 text-[#FEEBC0] hover:bg-[#FF522D] rounded transition">Emplois</a></li>
+                                <li><a href="offres-1.html #tab-internships" class="block py-2 px-3 text-[#FEEBC0] hover:bg-[#FF522D] rounded transition">Alternance</a></li>
+                            </ul>
+                        </details>
+                    </li>
+                    
+                    <li>
+                        <details class="group">
+                            <summary class="flex justify-between items-center py-2 px-3 text-[#FEEBC0] hover:bg-[#FF522D] rounded transition cursor-pointer">
+                                PROGRAMMES
+                                <i class="fas fa-chevron-down text-xs group-open:rotate-180 transition-transform"></i>
+                            </summary>
+                            <ul class="ml-4 mt-1 space-y-1">
+                                <li><a href="programme.html" class="block py-2 px-3 text-[#FEEBC0] hover:bg-[#FF522D] rounded transition">Forums des stages</a></li>
+                                <li><a href="programme.html" class="block py-2 px-3 text-[#FEEBC0] hover:bg-[#FF522D] rounded transition">Conférences carrières</a></li>
+                                <li><a href="programme.html" class="block py-2 px-3 text-[#FEEBC0] hover:bg-[#FF522D] rounded transition">Ateliers de préparation</a></li>
+                            </ul>
+                        </details>
+                    </li>
+                    
+                    <li><a href="#" class="block py-2 px-3 text-[#FEEBC0] hover:bg-[#FF522D] rounded transition">ACTUALITÉS</a></li>
+                    <li><a href="#parrains" class="block py-2 px-3 text-[#FEEBC0] hover:bg-[#FF522D] rounded transition">PARTENAIRES</a></li>
+                    
+                    <li class="pt-2 border-t border-[#FF522D]">
+                        <a href="inscript.html" class="block py-2 px-3 bg-[#FF522D] text-[#FEEBC0] font-bold rounded-lg flex items-center justify-center">
+                            <i class="fas fa-user-plus mr-2"></i> PARTICIPER
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Container -->
+    <div class="main-content-container">
+        <main class="px-4 py-10 grid grid-cols-1 lg:grid-cols-4 gap-10">
+            <!-- Sidebar -->
+            <div class="lg:col-span-1 order-2 lg:order-1 space-y-4">
+                <div class="bg-[#FF522D] text-[#FEEBC0] p-4 rounded-lg shadow-lg">
+                    <h2 class="font-bold text-lg mb-4 border-b border-[#FA7845] pb-2">RESSOURCES</h2>
+                    <ul class="space-y-3">
+                        <li>
+                            <details class="group">
+                                <summary class="flex justify-between items-center py-2 px-3 text-[#FEEBC0] hover:bg-[#FF522D] rounded transition cursor-pointer">
+                                    Guide du Candidat
+                                    <i class="fas fa-chevron-down text-xs group-open:rotate-180 transition-transform"></i>
+                                </summary>
+                                <ul class="ml-4 mt-1 space-y-1">
+                                    <li><a href="#" class="block py-2 px-3 text-[#FEEBC0] hover:bg-[#FF522D] rounded transition">Conseils de Candidature</a></li>
+                                    <li><a href="#" class="block py-2 px-3 text-[#FEEBC0] hover:bg-[#FF522D] rounded transition">CV et Lettre de motivation</a></li>
+                                    <li><a href="#" class="block py-2 px-3 text-[#FEEBC0] hover:bg-[#FF522D] rounded transition">Préparation aux entretiens</a></li>
+                                </ul>
+                            </details>
+                        </li>
+                        <li>
+                            <details class="group">
+                                <summary class="flex justify-between items-center py-2 px-3 text-[#FEEBC0] hover:bg-[#FF522D] rounded transition cursor-pointer">
+                                    Guide des Recruteurs
+                                    <i class="fas fa-chevron-down text-xs group-open:rotate-180 transition-transform"></i>
+                                </summary>
+                                <ul class="ml-4 mt-1 space-y-1">
+                                    <li><a href="#" class="block py-2 px-3 text-[#FEEBC0] hover:bg-[#FF522D] rounded transition">Comment recruter</a></li>
+                                    <li><a href="#" class="block py-2 px-3 text-[#FEEBC0] hover:bg-[#FF522D] rounded transition">Profils disponibles</a></li>
+                                    <li><a href="#" class="block py-2 px-3 text-[#FEEBC0] hover:bg-[#FF522D] rounded transition">Tarifs et options</a></li>
+                                </ul>
+                            </details>
+                        </li>
+                        <li><a href="#" class="hover:bg-[#FA7845] px-2 py-2 rounded block transition duration-300 flex items-center"><i class="fas fa-calendar-alt mr-2"></i> Calendrier des Événements</a></li>
+                        <li><a href="#" class="hover:bg-[#FA7845] px-2 py-2 rounded block transition duration-300 flex items-center"><i class="fas fa-file-pdf mr-2"></i> Documents utiles</a></li>
+                        <li><a href="#" class="hover:bg-[#FA7845] px-2 py-2 rounded block transition duration-300 flex items-center"><i class="fas fa-question-circle mr-2"></i> FAQ</a></li>
+                    </ul>
+                </div>
+                
+                <div class="bg-[#FDCC62] text-[#641A0B] p-4 rounded-lg shadow-lg">
+                    <h2 class="font-bold text-lg mb-4 border-b border-[#FA7845] pb-2">Participer</h2>
+                    <p class="text-sm mb-4">Inscrivez-vous pour ne rien manquer de nos événements et opportunités.</p>
+                    <div class="space-y-3">
+                        <a href="#" class="block bg-[#641A0B] hover:bg-[#7A2B1A] text-[#FEEBC0] text-center py-2 px-4 rounded-lg transition duration-300 flex items-center justify-center">
+                            <i class="fas fa-user-graduate mr-2"></i> Participer Gratuitement
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Statistiques -->
+                <div class="bg-white h-42 p-4 rounded-lg shadow-lg">
+                    <h2 class="font-bold text-lg mb-4 text-[#641A0B] border-b border-[#FF522D] pb-2">Nos chiffres</h2>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="stats-item bg-[#FEEBC0] p-3 rounded-lg text-center">
+                            <div class="text-2xl font-bold text-[#FF522D] count-up" data-target="1200">0</div>
+                            <div class="text-xs text-[#641A0B]">Entreprises</div>
+                        </div>
+                        <div class="stats-item bg-[#FEEBC0] p-3 rounded-lg text-center">
+                            <div class="text-2xl font-bold text-[#FF522D] count-up" data-target="8500">0</div>
+                            <div class="text-xs text-[#641A0B]">Candidats</div>
+                        </div>
+                        <div class="stats-item bg-[#FEEBC0] p-3 rounded-lg text-center">
+                            <div class="text-2xl font-bold text-[#FF522D] count-up" data-target="3200">0</div>
+                            <div class="text-xs text-[#641A0B]">Stages</div>
+                        </div>
+                        <div class="stats-item bg-[#FEEBC0] p-3 rounded-lg text-center">
+                            <div class="text-2xl font-bold text-[#FF522D] count-up" data-target="1800">0</div>
+                            <div class="text-xs text-[#641A0B]">Emplois</div>
+                        </div>
+                         <!-- Séparateur visuel -->
+                         <hr class=" border-[#FF522D] pb-2"> <hr class=" border-[#FF522D] "> 
+                 
+                        <div class="stats-item bg-[#FEEBC0] p-3 rounded-lg text-center">
+                            <div class="text-2xl font-bold text-[#FF522D] count-up" data-target="1800">0</div>
+                            <div class="text-xs text-[#641A0B]">Offres d'emploi</div>
+                        </div>
+                        <div class="stats-item bg-[#FEEBC0] p-3 rounded-lg text-center">
+                            <div class="text-2xl font-bold text-[#FF522D] count-up" data-target="3200">0</div>
+                            <div class="text-xs text-[#641A0B]">Stages obtenus</div>
+                        </div>
+                        <div class="stats-item bg-[#FEEBC0] p-3 rounded-lg text-center">
+                            <div class="text-2xl font-bold text-[#FF522D] count-up" data-target="8500">0</div>
+                            <div class="text-xs text-[#641A0B]">Candidats disponibles</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="lg:col-span-3 order-1 lg:order-2">
+                <!-- Banner -->
+                <div class="relative h-[400px] md:h-[500px] lg:h-[600px] overflow-hidden rounded-lg shadow-xl">
+                    <div class="absolute inset-0 animated-background" style="
+                        background-image: linear-gradient(
+                            rgba(100, 26, 11, 0.7), 
+                            rgba(255, 82, 45, 0.7)
+                        ), url('images/Pub-Poster.jpg');
+                    "></div>
+
+                    <div class="relative z-20 text-[#FEEBC0] p-6 md:p-8 h-full flex items-end">
+                        <div class="w-full">
+                            <div style="background-color: #FDCC62;" class="px-3 py-1 rounded inline-block mb-3 text-[#641A0B] font-bold">ÉDITION 2025</div>
+                            <div style="background-color: #FDCC62;" class="px-3 py-1 rounded inline-block mb-3 text-[#641A0B] font-bold"><a href="#" class="hover:text-[#7A2B1A]">Participer</a></div>
+                            <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 max-w-2xl leading-tight">
+                                Forum des Stages et de l'Emploi : Construisez Votre Avenir Professionnel
+                            </h1>
+                            <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+                                <span class="text-lg md:text-xl mb-3 md:mb-0">
+                                    <i class="far fa-calendar-alt mr-2"></i>15-17 Octobre 2025
+                                </span>
+                                <span class="text-lg md:text-xl">
+                                    <i class="fas fa-map-marker-alt mr-2"></i>Abidjan, Côte d'Ivoire
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                 <!-- Section À propos -->
+                 <section class="mt-10 fade-in" id="apropos">
+                    <h2 class="text-2xl font-bold text-[#641A0B] mb-6 border-b-2 border-[#FF522D] pb-2 inline-block">À PROPOS DE FODESE</h2>
+                    
+                    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                        <div class="flex flex-col md:flex-row gap-6">
+                            <div class="md:w-1/3">
+                                <img src="images/Pub-Poster.jpg" alt="À propos de FODESE" class="w-full h-auto rounded-lg hover:scale-105 transition-transform duration-500">
+                            </div>
+                            <div class="md:w-2/3">
+                                <h3 class="text-xl font-bold text-[#641A0B] mb-3">Notre mission</h3>
+                                <p class="text-gray-700 mb-4">FODESE est une plateforme innovante qui connecte les talents émergents avec les opportunités professionnelles. Notre mission est de faciliter l'insertion professionnelle des jeunes diplômés et de fournir aux entreprises un accès privilégié à des profils qualifiés.</p>
+                                
+                                <div class="grid grid-cols-2 gap-4 mt-4">
+                                    <div class="flex items-start">
+                                        <div class="bg-[#FF522D] text-[#FEEBC0] p-2 rounded-full mr-3">
+                                            <i class="fas fa-bullseye"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-[#641A0B]">Objectif</h4>
+                                            <p class="text-sm text-gray-600">Faciliter les rencontres professionnelles</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start">
+                                        <div class="bg-[#FF522D] text-[#FEEBC0] p-2 rounded-full mr-3">
+                                            <i class="fas fa-users"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-[#641A0B]">Communauté</h4>
+                                            <p class="text-sm text-gray-600">Plus de 10 000 membres</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start">
+                                        <div class="bg-[#FF522D] text-[#FEEBC0] p-2 rounded-full mr-3">
+                                            <i class="fas fa-calendar-check"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-[#641A0B]">Événements</h4>
+                                            <p class="text-sm text-gray-600">5 éditions réussies</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start">
+                                        <div class="bg-[#FF522D] text-[#FEEBC0] p-2 rounded-full mr-3">
+                                            <i class="fas fa-handshake"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-[#641A0B]">Partenariats</h4>
+                                            <p class="text-sm text-gray-600">50+ entreprises partenaires</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <a href="apropos.html" class="inline-block mt-6 bg-[#641A0B] hover:bg-[#7A2B1A] text-[#FEEBC0] px-6 py-2 rounded-lg font-medium transition duration-300 hover:scale-105 transform">
+                                    En savoir plus <i class="fas fa-arrow-right ml-2"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </section>  
+            </div>
+        </main>
+        <section class="mt-10 fade-in w-[100%] mx-auto" id="contenairs-golbal">
+                <!-- Marquee -->
+                <div class="marquee-container py-4 mt-4 w-100% h-80%">
+                    <div class="marquee text-sm md:text-base">
+                        <span class="mx-4">📢 Ne manquez pas notre prochain forum des stages le 15 octobre 2025</span>
+                        <span class="mx-4">🌟 50+ entreprises participantes</span>
+                        <span class="mx-4">🎯 500+ offres de stages et emplois</span>
+                        <span class="mx-4">🏆 10 conférences avec des experts</span>
+                        <span class="mx-4">💼 3 jours d'opportunités professionnelles</span>
+                    </div>
+                </div>
+                
+                <!-- Section Parrains -->
+                <section class="mt-10 fade-in" id="parrains">
+                    <h2 class="text-2xl font-bold text-[#641A0B] mb-6 border-b-2 border-[#FF522D] pb-2 inline-block">NOS PARRAINS PRESTIGIEUX</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Parrain 1 -->
+                        <div class="parrain-card bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300">
+                            <div class="h-48 bg-[#641A0B] flex items-center justify-center">
+                                <img src="images/FODESE-BADGE.jpg" alt="Parrain 1" class="w-full h-full object-cover">
+                            </div>
+                            <div class="p-4">
+                                <h3 class="text-lg font-bold text-[#641A0B] mb-2">Mr Kouassi Kouassi</h3>
+                                <p class="text-gray-600 text-sm mb-3">DG xxx</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Parrain 2 -->
+                        <div class="parrain-card bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300">
+                            <div class="h-48 bg-[#641A0B] flex items-center justify-center">
+                                <img src="images/Polo-FODESE.png" alt="Parrain 2" class="w-full h-full object-cover">
+                            </div>
+                            <div class="p-4">
+                                <h3 class="text-lg font-bold text-[#641A0B] mb-2">Mr Koné Yaya</h3>
+                                <p class="text-gray-600 text-sm mb-3">Directeur General xxxx</p>
+                               
+                            </div>
+                        </div>
+                        
+                        <!-- Parrain 3 -->
+                        <div class="parrain-card bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300">
+                            <div class="h-48 bg-[#641A0B] flex items-center justify-center">
+                                <img src="images/Polo-FODESE.png" alt="Parrain 3" class="w-full h-full object-cover">
+                            </div>
+                            <div class="p-4">
+                                <h3 class="text-lg font-bold text-[#641A0B] mb-2">Mr sylla bakary</h3>
+                                <p class="text-gray-600 text-sm mb-3">Dr XXX</p>
+                                
+                            </div>
+                        </div>
+                         <!-- Parrain 3 -->
+                         <div class="parrain-card bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300">
+                            <div class="h-48 bg-[#641A0B] flex items-center justify-center">
+                                <img src="images/Polo-FODESE.png" alt="Parrain 3" class="w-full h-full object-cover">
+                            </div>
+                            <div class="p-4">
+                                <h3 class="text-lg font-bold text-[#641A0B] mb-2">Mr sylla bakary</h3>
+                                <p class="text-gray-600 text-sm mb-3">Dr XXX</p>
+                                
+                            </div>
+                        </div>
+                         <!-- Parrain 3 -->
+                         <div class="parrain-card bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300">
+                            <div class="h-48 bg-[#641A0B] flex items-center justify-center">
+                                <img src="images/Polo-FODESE.png" alt="Parrain 3" class="w-full h-full object-cover">
+                            </div>
+                            <div class="p-4">
+                                <h3 class="text-lg font-bold text-[#641A0B] mb-2">Mr sylla bakary</h3>
+                                <p class="text-gray-600 text-sm mb-3">Dr XXX</p>
+                                
+                            </div>
+                        </div>
+                         <!-- Parrain 3 -->
+                         <div class="parrain-card bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300">
+                            <div class="h-48 bg-[#641A0B] flex items-center justify-center">
+                                <img src="images/Polo-FODESE.png" alt="Parrain 3" class="w-full h-full object-cover">
+                            </div>
+                            <div class="p-4">
+                                <h3 class="text-lg font-bold text-[#641A0B] mb-2">Mr sylla bakary</h3>
+                                <p class="text-gray-600 text-sm mb-3">Dr XXX</p>
+                                
+                            </div>
+                        </div>
+                        
+                    </div> <hr>
+                    
+                </section>
+
+                    <!-- Section Événements -->
+                    <section class="mt-10 fade-in">
+                        <h2 class="text-2xl font-bold text-[#641A0B] mb-6 border-b-2 border-[#FF522D] pb-2 inline-block">NOS ÉVÉNEMENTS</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <!-- Événement 1 -->
+                            <article class="event-capsule bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all duration-300">
+                                <div class="relative">
+                                    <div class="video-container">
+                                        <img src="images/Pub-Poster.jpg" alt="Forum Emploi 2023" class="w-full h-full object-cover">
+                                        <div class="play-button" onclick="playVideo(this, 'lwVvjmbbLxs')">
+                                            <i class="fas fa-play"></i>
+                                        </div>
+                                    </div>
+                                    <div class="absolute bottom-0 left-0 bg-[#641A0B] text-[#FEEBC0] px-3 py-1 text-sm font-bold">2023</div>
+                                </div>
+                                <div class="p-4">
+                                    <h3 class="text-lg font-bold text-[#641A0B] mb-2">Forum Emploi 2023</h3>
+                                    <p class="text-gray-600 text-sm mb-3">Retour sur nos moments clés de recrutement.</p>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-xs text-[#FF522D]"><i class="far fa-clock mr-1"></i> 15:32</span>
+                                        <a href="http://www.youtube.com/@empowertalentandcareers3109" class="text-[#FF522D] hover:text-[#641A0B] text-sm font-medium flex items-center transition">
+                                            Voir plus <i class="fas fa-arrow-right ml-2"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </article>
+                            
+                            <!-- Événement 2 -->
+                            <article class="event-capsule bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all duration-300">
+                                <div class="relative">
+                                    <div class="video-container">
+                                        <div class="play-button" onclick="playVideo(this, 'ThxNoqje7rM')">
+                                            <i class="fas fa-play"></i>
+                                        </div>
+                                    </div>
+                                    <div class="absolute bottom-0 left-0 bg-[#641A0B] text-[#FEEBC0] px-3 py-1 text-sm font-bold">2022</div>
+                                </div>
+                                <div class="p-4">
+                                    <h3 class="text-lg font-bold text-[#641A0B] mb-2">Atelier CV 2022</h3>
+                                    <p class="text-gray-600 text-sm mb-3">Apprenez à créer un CV percutant.</p>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-xs text-[#FF522D]"><i class="far fa-clock mr-1"></i> 22:15</span>
+                                        <a href="http://www.youtube.com/@empowertalentandcareers3109" class="text-[#FF522D] hover:text-[#641A0B] text-sm font-medium flex items-center transition">
+                                            Voir plus <i class="fas fa-arrow-right ml-2"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </article>
+                            
+                            <!-- Événement 3 -->
+                            <article class="event-capsule bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all duration-300">
+                                <div class="relative">
+                                    <div class="h-48 overflow-hidden">
+                                        <img src="images/Pub-Poster.jpg" alt="Galerie photos FODESE" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105">
+                                    </div>
+                                    <div class="absolute bottom-0 left-0 bg-[#641A0B] text-[#FEEBC0] px-3 py-1 text-sm font-bold">2021-2023</div>
+                                    <div class="absolute top-0 right-0 bg-[#FF522D] text-[#FEEBC0] px-2 py-1 text-xs font-bold flex items-center">
+                                        <i class="fas fa-images mr-1"></i> 24
+                                    </div>
+                                </div>
+                                <div class="p-4">
+                                    <h3 class="text-lg font-bold text-[#641A0B] mb-2">Galerie Photos</h3>
+                                    <p class="text-gray-600 text-sm mb-3">Explorez nos meilleurs moments en images.</p>
+                                    <a href="#" class="text-[#FF522D] hover:text-[#641A0B] text-sm font-medium flex items-center transition">
+                                        Parcourir la galerie <i class="fas fa-arrow-right ml-2"></i>
+                                    </a>
+                                </div>
+                            </article>
+                        </div>
+                        
+                        <div class="text-center mt-8">
+                            <a href="http://www.youtube.com/@empowertalentandcareers3109" class="inline-block bg-[#641A0B] hover:bg-[#FF522D] text-[#FEEBC0] px-6 py-3 rounded-lg font-medium transition duration-300">
+                                Voir toutes nos vidéos <i class="fas fa-play-circle ml-2"></i>
+                            </a>
+                        </div>
+                    </section>
+                
+                <!-- Section Intervenant -->
+                <section class="mt-10 fade-in">
+                    <h2 class="text-2xl font-bold text-[#641A0B] mb-6 border-b-2 border-[#FF522D] pb-2 inline-block">NOS Intervenant</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Parrain 1 -->
+                        <div class="parrain-card bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300">
+                            <div class="h-48 bg-[#641A0B] flex items-center justify-center">
+                                <img src="images/Pub-Poster.jpg" alt="Parrain 1" class="w-full h-full object-cover">
+                            </div>
+                            <div class="p-4">
+                                <h3 class="text-lg font-bold text-[#641A0B] mb-2">Mr Kouassi Kouassi</h3>
+                                <p class="text-gray-600 text-sm mb-3">DG xxx</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Parrain 2 -->
+                        <div class="parrain-card bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300">
+                            <div class="h-48 bg-[#641A0B] flex items-center justify-center">
+                                <img src="images/Pub-Poster.jpg" alt="Parrain 2" class="w-full h-full object-cover">
+                            </div>
+                            <div class="p-4">
+                                <h3 class="text-lg font-bold text-[#641A0B] mb-2">Mr Koné Yaya</h3>
+                                <p class="text-gray-600 text-sm mb-3">Directeur General xxxx</p>
+                               
+                            </div>
+                        </div>
+                        
+                        <!-- Parrain 3 -->
+                        <div class="parrain-card bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300">
+                            <div class="h-48 bg-[#641A0B] flex items-center justify-center">
+                                <img src="images/Pub-Poster.jpg" alt="Parrain 3" class="w-full h-full object-cover">
+                            </div>
+                            <div class="p-4">
+                                <h3 class="text-lg font-bold text-[#641A0B] mb-2">Mr sylla bakary</h3>
+                                <p class="text-gray-600 text-sm mb-3">Dr XXX</p>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            
+                
+                <!-- Section Témoignages -->
+                <section class="mt-10 fade-in w-[90%] mx-auto">
+                    <h2 class="text-2xl font-bold text-[#641A0B] mb-6 border-b-2 border-[#FF522D] pb-2 inline-block">TEMOIGNAGES</h2>
+                    
+                    <div class="relative w-full">
+                        <!-- Slider Container -->
+                        <div class="testimonial-slider overflow-hidden w-full">
+                            <div class="flex transition-transform duration-500 ease-in-out">
+                                <!-- Témoignage 1 -->
+                                <div class="testimonial-slide bg-white rounded-lg shadow-md p-6 min-w-full md:min-w-[50%] px-4 mx-2">
+                                    <div class="flex items-center mb-4">
+                                        <img src="https://via.placeholder.com/80?text=Profil" alt="Témoin" class="w-12 h-12 rounded-full mr-4">
+                                        <div>
+                                            <h4 class="font-bold text-[#641A0B]">Marie K.</h4>
+                                            <p class="text-sm text-gray-600">Stagiaire chez Entreprise X</p>
+                                        </div>
+                                    </div>
+                                    <p class="text-gray-700 italic mb-4">"Grâce à FODESE, j'ai trouvé un stage dans une entreprise leader de mon secteur. L'accompagnement et les conseils reçus ont été déterminants pour mon parcours professionnel."</p>
+                                    <div class="flex text-[#FF522D]">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                </div>
+                                
+                                <!-- Témoignage 2 -->
+                                <div class="testimonial-slide bg-white rounded-lg shadow-md p-6 min-w-full md:min-w-[50%] px-4 mx-2">
+                                    <div class="flex items-center mb-4">
+                                        <img src="https://via.placeholder.com/80?text=Profil" alt="Témoin" class="w-12 h-12 rounded-full mr-4">
+                                        <div>
+                                            <h4 class="font-bold text-[#641A0B]">Jean D.</h4>
+                                            <p class="text-sm text-gray-600">Recruteur chez Entreprise Y</p>
+                                        </div>
+                                    </div>
+                                    <p class="text-gray-700 italic mb-4">"FODESE nous permet de rencontrer des profils qualifiés et motivés. La qualité des candidats est toujours au rendez-vous, ce qui nous fait gagner un temps précieux dans notre processus de recrutement."</p>
+                                    <div class="flex text-[#FF522D]">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                    </div>
+                                </div>
+                                
+                                <!-- Témoignage 3 -->
+                                <div class="testimonial-slide bg-white rounded-lg shadow-md p-6 min-w-full md:min-w-[50%] px-4 mx-2">
+                                    <div class="flex items-center mb-4">
+                                        <img src="https://via.placeholder.com/80?text=Profil" alt="Témoin" class="w-12 h-12 rounded-full mr-4">
+                                        <div>
+                                            <h4 class="font-bold text-[#641A0B]">Amina S.</h4>
+                                            <p class="text-sm text-gray-600">Alternante chez Entreprise Z</p>
+                                        </div>
+                                    </div>
+                                    <p class="text-gray-700 italic mb-4">"Le forum FODESE m'a permis de trouver une alternance idéale qui correspond à mes études. L'organisation et la diversité des entreprises présentes sont impressionnantes."</p>
+                                    <div class="flex text-[#FF522D]">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Navigation -->
+                        <button class="testimonial-prev absolute left-0 top-1/2 -translate-y-1/2 -translate-x-8 bg-[#641A0B] text-[#FEEBC0] rounded-full w-10 h-10 flex items-center justify-center shadow-md hover:bg-[#FF522D] transition z-10">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="testimonial-next absolute right-0 top-1/2 -translate-y-1/2 translate-x-8 bg-[#641A0B] text-[#FEEBC0] rounded-full w-10 h-10 flex items-center justify-center shadow-md hover:bg-[#FF522D] transition z-10">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                        
+                        <!-- Indicators -->
+                        <div class="flex justify-center mt-6 space-x-2">
+                            <button class="testimonial-indicator w-3 h-3 rounded-full bg-[#641A0B] opacity-30"></button>
+                            <button class="testimonial-indicator w-3 h-3 rounded-full bg-[#641A0B] opacity-30"></button>
+                            <button class="testimonial-indicator w-3 h-3 rounded-full bg-[#641A0B] opacity-30"></button>
+                        </div>
+                    </div>
+                </section>
+                                
+            <!-- Section Partenaires -->
+<section class="mt-10 fade-in">
+    <div class="bg-white rounded-lg shadow-lg p-8">
+        <h2 class="text-2xl font-bold text-[#641A0B] mb-6 text-center">Nos Partenaires</h2>
+        
+        <div class="relative">
+            <!-- Conteneur des logos avec défilement -->
+            <div class="partners-container overflow-hidden">
+                <div class="partners-slide flex space-x-8">
+                    <!-- Partenaire 1 -->
+                    <div class="partner-item flex flex-col items-center justify-center min-w-[150px]">
+                        <img src="Logo png/Logo-FODESE---blanc.png" alt="Logo Partenaire 1" class="h-16 object-contain">
+                        <span class="mt-2 text-sm text-[#641A0B]">Entreprise A</span>
+                    </div>
+                    
+                    <!-- Partenaire 2 -->
+                    <div class="partner-item flex flex-col items-center justify-center min-w-[150px]">
+                        <img src="Logo png/Logo-FODESE---noir.png"Logo Partenaire 2" class="h-16 object-contain">
+                        <span class="mt-2 text-sm text-[#641A0B]">Entreprise B</span>
+                    </div>
+                    
+                    <!-- Partenaire 3 -->
+                    <div class="partner-item flex flex-col items-center justify-center min-w-[150px]">
+                        <img src="logos/partenaire3.png" alt="Logo Partenaire 3" class="h-16 object-contain">
+                        <span class="mt-2 text-sm text-[#641A0B]">Entreprise C</span>
+                    </div>
+                    
+                    <!-- Partenaire 4 -->
+                    <div class="partner-item flex flex-col items-center justify-center min-w-[150px]">
+                        <img src="logos/partenaire4.png" alt="Logo Partenaire 4" class="h-16 object-contain">
+                        <span class="mt-2 text-sm text-[#641A0B]">Entreprise D</span>
+                    </div>
+                    
+                    <!-- Partenaire 5 -->
+                    <div class="partner-item flex flex-col items-center justify-center min-w-[150px]">
+                        <img src="logos/partenaire5.png" alt="Logo Partenaire 5" class="h-16 object-contain">
+                        <span class="mt-2 text-sm text-[#641A0B]">Entreprise E</span>
+                    </div>
+                    
+                    <!-- Partenaire 6 -->
+                    <div class="partner-item flex flex-col items-center justify-center min-w-[150px]">
+                        <img src="logos/partenaire6.png" alt="Logo Partenaire 6" class="h-16 object-contain">
+                        <span class="mt-2 text-sm text-[#641A0B]">Entreprise F</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Boutons de navigation (optionnel) -->
+            <button class="partner-prev absolute left-0 top-1/2 transform -translate-y-1/2 bg-[#641A0B] text-white p-2 rounded-full">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="partner-next absolute right-0 top-1/2 transform -translate-y-1/2 bg-[#641A0B] text-white p-2 rounded-full">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+</section>
+
+             
+                <section class="py-16 bg-white text-primary">
+                    <div class="container mx-auto px-4 text-center">
+                        <h2 class="text-3xl font-bold mb-6">Prêt à booster votre carrière ?</h2>
+                        <p class="text-xl mb-8 max-w-2xl mx-auto">
+                            Inscrivez-vous dès maintenant à nos prochains événements
+                        </p>
+                        <a href="inscript.html" class="bg-[#641A0B] text-primary hover:bg-gray-100 font-bold py-3 px-8 rounded-lg inline-block">
+                            <i class="fas fa-handshake ml-2"></i> Participer Gratuitement
+                        </a>
+                    </div>
+                </section>
+            </select>
+    </div>
+
+    <footer class="bg-[#641A0B] text-[#FEEBC0] py-8 mt-12 fade-in">
+        <div class="main-content-container">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="md:col-span-2">
+                    <img src="logo png/Logo-FODESE---blanc.png" alt="FODESE Logo" class="h-12 mb-4">
+                    <p class="text-sm">Plateforme de connexion entre talents et opportunités professionnelles.</p>
+                    <div class="flex space-x-4 mt-4">
+                        <a href="#" class="text-xl hover:text-[#FA7845] transition" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-xl hover:text-[#FA7845] transition" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-xl hover:text-[#FA7845] transition" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="text-xl hover:text-[#FA7845] transition" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-xl hover:text-[#FA7845] transition" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg mb-4">LIENS RAPIDES</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-[#FA7845] transition">Accueil</a></li>
+                        <li><a href="#" class="hover:text-[#FA7845] transition">Offres de Stage</a></li>
+                        <li><a href="#" class="hover:text-[#FA7845] transition">Offres d'Emploi</a></li>
+                        <li><a href="#" class="hover:text-[#FA7845] transition">Événements</a></li>
+                        <li><a href="#" class="hover:text-[#FA7845] transition">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg mb-4">CONTACT</h3>
+                    <address class="not-italic">
+                        <p class="mb-2"><i class="fas fa-map-marker-alt mr-2"></i> Abidjan, Côte d'Ivoire</p>
+                        <p class="mb-2"><i class="fas fa-phone-alt mr-2"></i> +225 XX XX XX XX</p>
+                        <p class="mb-2"><i class="fas fa-envelope mr-2"></i> <a href="mailto:contact@fodese.org" class="hover:text-[#FA7845]">contact@fodese.org</a></p>
+                        <p class="mb-2"><i class="fas fa-clock mr-2"></i> Lun-Ven: 8h-17h</p>
+                    </address>
+                </div>
+            </div>
+            <div class="border-t border-[#FF522D] mt-8 pt-6 text-center text-sm">
+                <p>© 2025 FODESE - Tous droits réservés | <a href="#" class="hover:text-[#FA7845]">Mentions légales</a> | <a href="#" class="hover:text-[#FA7845]">Politique de confidentialité</a> | <a href="#" class="hover:text-[#FA7845]">Conditions d'utilisation</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Menu mobile
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        if (mobileMenuButton && mobileMenu) {
+            mobileMenuButton.addEventListener('click', function() {
+                mobileMenu.classList.toggle('open');
+                const icon = this.querySelector('i');
+                icon.classList.toggle('fa-bars');
+                icon.classList.toggle('fa-times');
+                
+                // Empêche le défilement lorsque le menu est ouvert
+                document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+            });
+        }
+
+        // Changement de fond de la bannière
+        const backgrounds = [
+            'images/Polo-FODESE.png',
+            'images/Pub-Poster.jpg',
+            'images/logo.jpg'
+        ];
+        let currentBg = 0;
+
+        function changeBackground() {
+            const bgElement = document.querySelector('.animated-background');
+            if (bgElement) {
+                currentBg = (currentBg + 1) % backgrounds.length;
+                bgElement.style.backgroundImage = `
+                    linear-gradient(
+                        rgba(100, 26, 11, 0.7), 
+                        rgba(255, 82, 45, 0.7)
+                    ), url('${backgrounds[currentBg]}')
+                `;
+            }
+        }
+
+        if (backgrounds.length > 1) {
+            setInterval(changeBackground, 10000);
+        }
+
+        // Fonction pour jouer les vidéos
+        function playVideo(button, videoId) {
+            if (!button || !videoId) return;
+            
+            const container = button.parentElement;
+            if (container) {
+                container.innerHTML = `
+                    <iframe src="about:blank" 
+                            data-src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen
+                            class="absolute top-0 left-0 w-full h-full"></iframe>
+                `;
+                const iframe = container.querySelector('iframe');
+                if (iframe) {
+                    iframe.src = iframe.dataset.src;
+                }
+            }
+        }
+
+        // Menu déroulant mobile
+        const joinButton = document.getElementById('join-button');
+        if (joinButton) {
+            joinButton.addEventListener('click', function(e) {
+                if (window.innerWidth < 768) {
+                    e.preventDefault();
+                    const dropdown = this.nextElementSibling;
+                    if (dropdown) {
+                        dropdown.classList.toggle('hidden');
+                    }
+                }
+            });
+        }
+
+        // Animation au scroll
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animation des éléments fade-in
+            const fadeElements = document.querySelectorAll('.fade-in');
+            const fadeInObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        
+                        // Animation spécifique pour les cartes de parrains
+                        if (entry.target.querySelector('.parrain-card')) {
+                            const cards = entry.target.querySelectorAll('.parrain-card');
+                            cards.forEach((card, index) => {
+                                setTimeout(() => {
+                                    card.classList.add('visible');
+                                }, index * 200);
+                            });
+                        }
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            fadeElements.forEach(el => fadeInObserver.observe(el));
+
+            // Animation des compteurs
+            const statsSection = document.querySelector('.bg-\\[\\#FF522D\\]');
+            const counterObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animateCounters();
+                        counterObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            if (statsSection) {
+                counterObserver.observe(statsSection);
+            }
+        });
+
+        // Animation des compteurs
+        function animateCounters() {
+            const counters = document.querySelectorAll('.count-up');
+            const duration = 2000; // Durée totale de l'animation en ms
+            const frameDuration = 1000 / 60; // 60 fps
+            
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                const start = 0;
+                const frames = Math.floor(duration / frameDuration);
+                const increment = (target - start) / frames;
+                
+                let current = start;
+                const updateCounter = () => {
+                    current += increment;
+                    counter.textContent = Math.floor(current);
+                    
+                    if (current < target) {
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        counter.textContent = target;
+                    }
+                };
+                
+                updateCounter();
+            });
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+        const slider = document.querySelector('.testimonial-slider .flex');
+        const slides = document.querySelectorAll('.testimonial-slide');
+        const prevBtn = document.querySelector('.testimonial-prev');
+        const nextBtn = document.querySelector('.testimonial-next');
+        const indicators = document.querySelectorAll('.testimonial-indicator');
+        
+        let currentIndex = 0;
+        const slideCount = slides.length;
+        
+        // Set initial active indicator
+        indicators[0].classList.remove('opacity-30');
+        indicators[0].classList.add('opacity-100');
+        
+        // Function to update slider position
+        function updateSlider() {
+            const slideWidth = slides[0].offsetWidth + 16; // +16px pour la marge
+            slider.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+            
+            // Update indicators
+            indicators.forEach((indicator, index) => {
+                if (index === currentIndex) {
+                    indicator.classList.remove('opacity-30');
+                    indicator.classList.add('opacity-100');
+                } else {
+                    indicator.classList.remove('opacity-100');
+                    indicator.classList.add('opacity-30');
+                }
+            });
+        }
+        
+        // Next slide
+        nextBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % slideCount;
+            updateSlider();
+        });
+        
+        // Previous slide
+        prevBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex - 1 + slideCount) % slideCount;
+            updateSlider();
+        });
+        
+        // Click on indicator
+        indicators.forEach((indicator, index) => {
+            indicator.addEventListener('click', () => {
+                currentIndex = index;
+                updateSlider();
+            });
+        });
+        
+        // Auto-slide (optionnel)
+        let autoSlide = setInterval(() => {
+            currentIndex = (currentIndex + 1) % slideCount;
+            updateSlider();
+        }, 5000);
+        
+        // Pause on hover
+        slider.parentElement.addEventListener('mouseenter', () => {
+            clearInterval(autoSlide);
+        });
+        
+        slider.parentElement.addEventListener('mouseleave', () => {
+            autoSlide = setInterval(() => {
+                currentIndex = (currentIndex + 1) % slideCount;
+                updateSlider();
+            }, 5000);
+        });
+        
+        // Responsive adjustments
+        window.addEventListener('resize', updateSlider);
+    });
+    window.addEventListener('load', function() {
+    const loadingScreen = document.getElementById('loading-screen');
+    // Désactive l'opacity
+    loadingScreen.classList.add('opacity-0');
+    // Cache après la fin de la transition
+    setTimeout(() => {
+      loadingScreen.classList.add('hidden');
+    }, 500); // Doit correspondre à la durée de votre transition
+  });
+
+      // Animation de défilement automatique
+      const slide = document.querySelector('.partners-slide');
+    let isPaused = false;
+    
+    // Démarrer l'animation
+    function startAnimation() {
+        slide.style.animationPlayState = 'running';
+    }
+    
+    // Mettre en pause au survol
+    document.querySelector('.partners-container').addEventListener('mouseenter', () => {
+        slide.style.animationPlayState = 'paused';
+        isPaused = true;
+    });
+    
+    // Reprendre quand la souris quitte
+    document.querySelector('.partners-container').addEventListener('mouseleave', () => {
+        if (isPaused) {
+            slide.style.animationPlayState = 'running';
+            isPaused = false;
+        }
+    });
+    
+    // Navigation manuelle (optionnelle)
+    document.querySelector('.partner-prev').addEventListener('click', () => {
+        // Logique pour reculer
+    });
+    
+    document.querySelector('.partner-next').addEventListener('click', () => {
+        // Logique pour avancer
+    });
+    </script>
+</body>
+</html>

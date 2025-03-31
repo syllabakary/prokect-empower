@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FODESE - Formulaire de Participation</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Couleurs FODESE */
+        .bg-primary { background-color: #641A0B; }
+        .bg-secondary { background-color: #FF522D; }
+        .bg-accent { background-color: #FDCC62; }
+        .bg-light { background-color: #FEEBC0; }
+        
+        .text-primary { color: #641A0B; }
+        .text-secondary { color: #FF522D; }
+        .text-accent { color: #FDCC62; }
+        .text-light { color: #FEEBC0; }
+        
+        /* Dégradé */
+        .bg-gradient {
+            background: linear-gradient(135deg, rgba(255,82,45,0.9) 0%, rgba(100,26,11,0.9) 100%);
+        }
+        
+        /* Bouton */
+        .btn-primary {
+            background-color: #FF522D;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #641A0B;
+        }
+        
+        /* Animation du bouton */
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body class="bg-light min-h-screen flex flex-col">
+    <!-- En-tête -->
+    <header class="bg-primary text-light py-4 shadow-md">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <a href="/" class="flex items-center">
+                <img src="logo png/Logo-FODESE---blanc.png" alt="FODESE Logo" class="h-10">
+               
+            </a>
+
+            <a href="acceuil.html" class="flex items-center">
+              Retour
+            </a>
+        </div>
+    </header>
+
+    <!-- Contenu principal -->
+    <main class="flex-grow">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+            
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                <div class="flex flex-col lg:flex-row">
+                    <!-- Section image (masquée sur mobile) -->
+                    <div class="hidden lg:block lg:w-1/2 bg-gradient p-8">
+                        <div class="h-full flex flex-col justify-center text-center text-light">
+                            <img src="logo png/Logo-FODESE---blanc.png" alt="FODESE Logo" class="h-24 mx-auto mb-6">
+                            <h2 class="text-3xl font-bold mb-4">Participez à FODESE</h2>
+                            <p class="text-lg mb-8">Rejoignez notre plateforme pour accéder à des opportunités uniques</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Section formulaire -->
+                    <div class="w-full lg:w-1/2 p-6 sm:p-8 md:p-10">
+                        <!-- Logo visible uniquement sur mobile -->
+                        <div class="lg:hidden mb-6 text-center">
+                            <img src="logo png/Logo-FODESE---blanc.png" alt="FODESE Logo" class="h-16 mx-auto mb-4">
+                            <h2 class="text-2xl font-bold text-primary">Formulaire de Participation</h2>
+                        </div>
+                        
+                        <form id="participationForm" class="space-y-4">
+                            <!-- Type de participant -->
+                            <div>
+                                <label for="participantType" class="block text-sm font-medium text-primary mb-1">Vous êtes :</label>
+                                <select id="participantType" name="participantType" class="w-full px-4 py-2 border border-accent rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary">
+                                    <option value="">-- Sélectionnez votre profil --</option>
+                                    <option value="candidat">Candidat</option>
+                                    <option value="recruteur">Recruteur</option>
+                                    <option value="institutionnel">Institutionnel</option>
+                                    <option value="ecole">École/Université</option>
+                                </select>
+                            </div>
+
+                            <!-- Champs spécifiques -->
+                            <div id="specificFields" class="space-y-4">
+                                <!-- Les champs seront injectés ici par JavaScript -->
+                            </div>
+                            
+                            <!-- Bouton pour les candidats (caché par défaut) -->
+                            <div id="candidatButton" class="hidden text-center">
+                                <a href="https://new.newpowerjuca.com/forumstages/forum.php" class="btn-primary inline-block py-3 px-6 text-light font-medium rounded-lg shadow-md pulse">
+                                    <i class="fas fa-external-link-alt mr-2"></i> Accéder au formulaire candidat
+                                </a>
+                                <p class="text-sm text-gray-600 mt-2">Vous serez redirigé vers la plateforme d'inscription</p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Pied de page -->
+    <footer class="bg-primary text-light py-6">
+        <div class="container mx-auto px-4 text-center">
+            <p>© 2023 FODESE - Tous droits réservés</p>
+        </div>
+    </footer>
+
+    <script>
+        // Gestion des champs selon le type de participant
+        document.getElementById('participantType').addEventListener('change', function() {
+            const participantType = this.value;
+            const specificFields = document.getElementById('specificFields');
+            const candidatButton = document.getElementById('candidatButton');
+            
+            // Réinitialiser
+            specificFields.innerHTML = '';
+            candidatButton.classList.add('hidden');
+            
+            if (!participantType) return;
+            
+            if (participantType === 'candidat') {
+                // Afficher uniquement le bouton pour les candidats
+                candidatButton.classList.remove('hidden');
+            } else {
+                // Afficher les champs spécifiques pour les autres types
+                specificFields.classList.remove('hidden');
+                
+                switch(participantType) {
+                    case 'recruteur':
+                        specificFields.innerHTML = `
+                            <div>
+                                <label for="entreprise" class="block text-sm font-medium text-primary mb-1">Entreprise *</label>
+                                <input type="text" id="entreprise" name="entreprise" required 
+                                       class="w-full px-4 py-2 border border-accent rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
+                                       placeholder="Nom de votre entreprise">
+                            </div>
+                            <div>
+                                <label for="poste" class="block text-sm font-medium text-primary mb-1">Poste occupé *</label>
+                                <input type="text" id="poste" name="poste" required 
+                                       class="w-full px-4 py-2 border border-accent rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
+                                       placeholder="Votre poste dans l'entreprise">
+                            </div>
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-primary mb-1">Email professionnel *</label>
+                                <input type="email" id="email" name="email" required 
+                                       class="w-full px-4 py-2 border border-accent rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
+                                       placeholder="exemple@entreprise.com">
+                            </div>
+                            <div>
+                                <label for="phone" class="block text-sm font-medium text-primary mb-1">Téléphone *</label>
+                                <input type="tel" id="phone" name="phone" required 
+                                       class="w-full px-4 py-2 border border-accent rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
+                                       placeholder="+225 XX XX XX XX">
+                            </div>
+                            <button type="submit" class="btn-primary w-full py-3 px-4 text-light font-medium rounded-lg shadow-md mt-4">
+                                <i class="fas fa-paper-plane mr-2"></i> Soumettre ma demande
+                            </button>
+                        `;
+                        break;
+                        
+                    case 'institutionnel':
+                        specificFields.innerHTML = `
+                            <div>
+                                <label for="institution" class="block text-sm font-medium text-primary mb-1">Institution *</label>
+                                <input type="text" id="institution" name="institution" required 
+                                       class="w-full px-4 py-2 border border-accent rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
+                                       placeholder="Nom de votre institution">
+                            </div>
+                            <div>
+                                <label for="fonction" class="block text-sm font-medium text-primary mb-1">Fonction *</label>
+                                <input type="text" id="fonction" name="fonction" required 
+                                       class="w-full px-4 py-2 border border-accent rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
+                                       placeholder="Votre fonction">
+                            </div>
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-primary mb-1">Email professionnel *</label>
+                                <input type="email" id="email" name="email" required 
+                                       class="w-full px-4 py-2 border border-accent rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
+                                       placeholder="exemple@institution.com">
+                            </div>
+                            <div>
+                                <label for="phone" class="block text-sm font-medium text-primary mb-1">Téléphone *</label>
+                                <input type="tel" id="phone" name="phone" required 
+                                       class="w-full px-4 py-2 border border-accent rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
+                                       placeholder="+225 XX XX XX XX">
+                            </div>
+                            <button type="submit" class="btn-primary w-full py-3 px-4 text-light font-medium rounded-lg shadow-md mt-4">
+                                <i class="fas fa-paper-plane mr-2"></i> Soumettre ma demande
+                            </button>
+                        `;
+                        break;
+                        
+                    case 'ecole':
+                        specificFields.innerHTML = `
+                            <div>
+                                <label for="nomEcole" class="block text-sm font-medium text-primary mb-1">Nom de l'établissement *</label>
+                                <input type="text" id="nomEcole" name="nomEcole" required 
+                                       class="w-full px-4 py-2 border border-accent rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
+                                       placeholder="Nom de votre école/université">
+                            </div>
+                            <div>
+                                <label for="typeEtablissement" class="block text-sm font-medium text-primary mb-1">Type d'établissement *</label>
+                                <select id="typeEtablissement" name="typeEtablissement" class="w-full px-4 py-2 border border-accent rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary" required>
+                                    <option value="">-- Sélectionnez un type --</option>
+                                    <option value="universite">Université</option>
+                                    <option value="grande_ecole">Grande École</option>
+                                    <option value="lycee">Lycée</option>
+                                    <option value="centre_formation">Centre de formation</option>
+                                    <option value="autre">Autre</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-primary mb-1">Email institutionnel *</label>
+                                <input type="email" id="email" name="email" required 
+                                       class="w-full px-4 py-2 border border-accent rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
+                                       placeholder="exemple@ecole.com">
+                            </div>
+                            <div>
+                                <label for="phone" class="block text-sm font-medium text-primary mb-1">Téléphone *</label>
+                                <input type="tel" id="phone" name="phone" required 
+                                       class="w-full px-4 py-2 border border-accent rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
+                                       placeholder="+225 XX XX XX XX">
+                            </div>
+                            <button type="submit" class="btn-primary w-full py-3 px-4 text-light font-medium rounded-lg shadow-md mt-4">
+                                <i class="fas fa-paper-plane mr-2"></i> Soumettre ma demande
+                            </button>
+                        `;
+                        break;
+                }
+            }
+        });
+    </script>
+</body>
+</html>

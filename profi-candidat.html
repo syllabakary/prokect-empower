@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FODESE - Espace Candidat</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Couleurs FODESE */
+        .bg-fodese-primary { background-color: #641A0B; }
+        .bg-fodese-secondary { background-color: #FF522D; }
+        .bg-fodese-accent { background-color: #FDCC62; }
+        .bg-fodese-light { background-color: #FEEBC0; }➜  prokect-empower git:(main) git checkout -b nom-de-votre-branche
+
+        
+        .text-fodese-primary { color: #641A0B; }
+        .text-fodese-secondary { color: #FF522D; }
+        .text-fodese-accent { color: #FDCC62; }
+        .text-fodese-light { color: #FEEBC0; }
+        
+        .border-fodese-primary { border-color: #641A0B; }
+        .border-fodese-secondary { border-color: #FF522D; }
+        .border-fodese-accent { border-color: #FDCC62; }
+        
+        /* Styles personnalisés */
+        .form-section {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #FDCC62;
+        }
+        .file-upload {
+            border: 2px dashed #FDCC62;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background-color: rgba(254, 235, 192, 0.3);
+        }
+        .file-upload:hover {
+            background-color: rgba(253, 204, 98, 0.2);
+        }
+        .btn-primary {
+            background-color: #FF522D;
+            color: white;
+            transition: all 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #641A0B;
+        }
+        .btn-secondary {
+            background-color: #FDCC62;
+            color: #641A0B;
+            transition: all 0.3s;
+        }
+        .btn-secondary:hover {
+            background-color: #641A0B;
+            color: #FEEBC0;
+        }
+        /* Animation pour les alertes */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .alert {
+            animation: fadeIn 0.5s ease-out;
+        }
+    </style>
+</head>
+<body class="bg-fodese-light">
+    <!-- Navigation améliorée -->
+    <nav class="bg-fodese-primary text-fodese-light shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center">
+            <div class="flex items-center mb-2 md:mb-0">
+                <a href="#" class="flex items-center">
+                    <img src="logo.png" alt="FODESE Logo" class="h-10">
+                    <span class="ml-2 text-xl font-bold hidden md:inline">Espace Candidat</span>
+                </a>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <span class="text-sm md:text-base">Matricule: <strong class="text-fodese-accent">FOD2023-4587</strong></span>
+                <button class="bg-fodese-secondary hover:bg-fodese-primary text-fodese-light px-3 py-1 rounded-lg transition-colors">
+                    <i class="fas fa-sign-out-alt mr-1"></i> <span class="hidden md:inline">Déconnexion</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 py-8">
+        <!-- Alertes -->
+        <div id="alert" class="hidden alert fixed top-20 right-4 bg-green-500 text-white px-4 py-2 rounded-md shadow-lg z-50">
+            <i class="fas fa-check-circle mr-2"></i>
+            <span id="alert-message">Modifications enregistrées avec succès</span>
+        </div>
+
+        <!-- Profil et Informations -->
+        <div class="form-section">
+            <h2 class="text-2xl font-bold text-fodese-primary mb-6 flex items-center">
+                <i class="fas fa-user-circle mr-2 text-fodese-secondary"></i> Mon Profil
+            </h2>
+            
+            <form id="profileForm">
+                <div class="grid md:grid-cols-2 gap-6">
+                    <!-- Colonne 1 -->
+                    <div>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-fodese-primary mb-1">Nom(s) *</label>
+                            <input type="text" value="Dupont" required
+                                class="w-full px-3 py-2 border border-fodese-accent rounded-md focus:outline-none focus:ring-2 focus:ring-fodese-secondary focus:border-fodese-secondary">
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-fodese-primary mb-1">Prénom(s) *</label>
+                            <input type="text" value="Jean" required
+                                class="w-full px-3 py-2 border border-fodese-accent rounded-md focus:outline-none focus:ring-2 focus:ring-fodese-secondary focus:border-fodese-secondary">
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-fodese-primary mb-1">Genre *</label>
+                            <select required
+                                class="w-full px-3 py-2 border border-fodese-accent rounded-md focus:outline-none focus:ring-2 focus:ring-fodese-secondary focus:border-fodese-secondary">
+                                <option value="M">Masculin</option>
+                                <option value="F">Féminin</option>
+                                <option value="O">Autre</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-fodese-primary mb-1">Date de naissance *</label>
+                            <input type="date" value="1995-05-15" required
+                                class="w-full px-3 py-2 border border-fodese-accent rounded-md focus:outline-none focus:ring-2 focus:ring-fodese-secondary focus:border-fodese-secondary">
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-fodese-primary mb-1">Email *</label>
+                            <input type="email" value="jean.dupont@example.com" required
+                                class="w-full px-3 py-2 border border-fodese-accent rounded-md focus:outline-none focus:ring-2 focus:ring-fodese-secondary focus:border-fodese-secondary">
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-fodese-primary mb-1">Numéro de téléphone *</label>
+                            <input type="tel" value="+225 0000000" required
+                                class="w-full px-3 py-2 border border-fodese-accent rounded-md focus:outline-none focus:ring-2 focus:ring-fodese-secondary focus:border-fodese-secondary">
+                        </div>
+                    </div>
+                    
+                    <!-- Colonne 2 -->
+                    <div>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-fodese-primary mb-1">Niveau d'étude *</label>
+                            <select required
+                                class="w-full px-3 py-2 border border-fodese-accent rounded-md focus:outline-none focus:ring-2 focus:ring-fodese-secondary focus:border-fodese-secondary">
+                                <option value="master">Master</option>
+                                <option value="licence">Licence</option>
+                                <option value="bts">BTS</option>
+                                <option value="bac2">BAC +2</option>
+                                <option value="bac1">BAC +1</option>
+                                <option value="bac">BAC</option>
+                                <option value="bepc">BEPC</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-fodese-primary mb-1">Pays de naissance *</label>
+                            <select required
+                                class="w-full px-3 py-2 border border-fodese-accent rounded-md focus:outline-none focus:ring-2 focus:ring-fodese-secondary focus:border-fodese-secondary">
+                                <option value="CI">Côte d'Ivoire</option>
+                                <option value="FR">France</option>
+                                <option value="SN">Sénégal</option>
+                                <!-- Ajouter tous les pays ici -->
+                            </select>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-fodese-primary mb-1">Nationalité *</label>
+                            <select required
+                                class="w-full px-3 py-2 border border-fodese-accent rounded-md focus:outline-none focus:ring-2 focus:ring-fodese-secondary focus:border-fodese-secondary">
+                                <option value="CI">Ivoirienne</option>
+                                <option value="FR">Française</option>
+                                <option value="SN">Sénégalaise</option>
+                                <!-- Ajouter toutes les nationalités ici -->
+                            </select>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-fodese-primary mb-1">Domaine d'études *</label>
+                            <input type="text" value="Informatique" required
+                                class="w-full px-3 py-2 border border-fodese-accent rounded-md focus:outline-none focus:ring-2 focus:ring-fodese-secondary focus:border-fodese-secondary">
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-fodese-primary mb-1">École/Université *</label>
+                            <input type="text" value="Université Félix Houphouët-Boigny" required
+                                class="w-full px-3 py-2 border border-fodese-accent rounded-md focus:outline-none focus:ring-2 focus:ring-fodese-secondary focus:border-fodese-secondary">
+                        </div>
+                        
+                    </div>
+                </div>
+                
+                <div class="mt-6 flex justify-between">
+                    <button type="reset" class="btn-secondary font-medium py-2 px-6 rounded-md">
+                        <i class="fas fa-undo mr-2"></i> Annuler
+                    </button>
+                    <button type="submit" class="btn-primary font-medium py-2 px-6 rounded-md">
+                        <i class="fas fa-save mr-2"></i> Enregistrer
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Documents -->
+        <div class="form-section">
+            <h2 class="text-2xl font-bold text-fodese-primary mb-6 flex items-center">
+                <i class="fas fa-file-upload mr-2 text-fodese-secondary"></i> Mes Documents
+            </h2>
+            
+            <div class="file-upload mb-6" id="fileUploadArea">
+                <i class="fas fa-cloud-upload-alt text-4xl text-fodese-primary mb-2"></i>
+                <p class="text-sm text-fodese-primary">Glissez-déposez vos fichiers ici ou <span class="text-fodese-secondary font-medium">parcourir</span></p>
+                <input type="file" id="fileInput" class="hidden" multiple accept=".pdf,.doc,.docx,.jpg,.png">
+            </div>
+            
+            <div class="space-y-4" id="documentsList">
+                <div class="flex justify-between items-center p-3 bg-fodese-light rounded-md">
+                    <div class="flex items-center">
+                        <i class="fas fa-file-pdf text-2xl text-fodese-secondary mr-3"></i>
+                        <div>
+                            <p class="font-medium text-fodese-primary">CV_Jean_Dupont.pdf</p>
+                            <p class="text-xs text-fodese-primary opacity-70">Téléchargé le 12/10/2023</p>
+                        </div>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button class="text-fodese-primary hover:text-fodese-secondary">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="text-fodese-primary hover:text-fodese-secondary">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-6 flex flex-wrap gap-4">
+                <button class="btn-secondary font-medium py-2 px-6 rounded-md">
+                    <i class="fas fa-magic mr-2"></i> Générer un CV automatique
+                </button>
+                <button class="btn-primary font-medium py-2 px-6 rounded-md">
+                    <i class="fas fa-file-import mr-2"></i> Importer depuis LinkedIn
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Fonction pour afficher une alerte
+        function showAlert(message, type = 'success') {
+            const alert = document.getElementById('alert');
+            const alertMessage = document.getElementById('alert-message');
+            
+            alertMessage.textContent = message;
+            alert.className = `alert fixed top-20 right-4 px-4 py-2 rounded-md shadow-lg z-50`;
+            
+            if (type === 'success') {
+                alert.classList.add('bg-green-500', 'text-white');
+            } else if (type === 'error') {
+                alert.classList.add('bg-red-500', 'text-white');
+            }
+            
+            alert.classList.remove('hidden');
+            
+            setTimeout(() => {
+                alert.classList.add('hidden');
+            }, 3000);
+        }
+
+        // Gestion de l'upload de fichiers
+        const fileUploadArea = document.getElementById('fileUploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const documentsList = document.getElementById('documentsList');
+
+        fileUploadArea.addEventListener('click', () => fileInput.click());
+        
+        fileUploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            fileUploadArea.style.backgroundColor = 'rgba(253, 204, 98, 0.2)';
+        });
+        
+        fileUploadArea.addEventListener('dragleave', () => {
+            fileUploadArea.style.backgroundColor = 'rgba(254, 235, 192, 0.3)';
+        });
+        
+        fileUploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            fileUploadArea.style.backgroundColor = 'rgba(254, 235, 192, 0.3)';
+            if (e.dataTransfer.files.length) {
+                fileInput.files = e.dataTransfer.files;
+                handleFiles(e.dataTransfer.files);
+            }
+        });
+        
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length) {
+                handleFiles(e.target.files);
+            }
+        });
+        
+        function handleFiles(files) {
+            showAlert(`${files.length} fichier(s) sélectionné(s)`, 'success');
+            
+            // Ici vous ajouteriez la logique pour afficher les fichiers dans la liste
+            // et les uploader vers le serveur
+        }
+
+        // Gestion du formulaire de profil
+        document.getElementById('profileForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Simulation d'envoi au serveur
+            setTimeout(() => {
+                showAlert('Profil mis à jour avec succès!');
+            }, 1000);
+        });
+
+        // Gestion de la suppression de documents
+        documentsList.addEventListener('click', (e) => {
+            if (e.target.closest('.fa-trash')) {
+                const documentItem = e.target.closest('.flex.justify-between');
+                if (confirm('Voulez-vous vraiment supprimer ce document ?')) {
+                    documentItem.remove();
+                    showAlert('Document supprimé', 'success');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>À propos - FODESE</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #641A0B;
+            --secondary: #FF522D;
+            --accent: #FDCC62;
+            --light: #FEEBC0;
+        }
+        
+        .bg-primary { background-color: var(--primary); }
+        .text-primary { color: var(--primary); }
+        .border-primary { border-color: var(--primary); }
+        
+        .bg-secondary { background-color: var(--secondary); }
+        .text-secondary { color: var(--secondary); }
+        .border-secondary { border-color: var(--secondary); }
+        
+        .bg-accent { background-color: var(--accent); }
+        .text-accent { color: var(--accent); }
+        
+        .bg-light { background-color: var(--light); }
+        
+        .fade-in {
+            animation: fadeIn 1s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .hover-scale {
+            transition: transform 0.3s ease;
+        }
+        
+        .hover-scale:hover {
+            transform: scale(1.03);
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-left: 2.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .timeline-item:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0.25rem;
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 50%;
+            background-color: var(--secondary);
+            border: 4px solid white;
+            box-shadow: 0 0 0 2px var(--secondary);
+        }
+        
+        .timeline-item:after {
+            content: "";
+            position: absolute;
+            left: 0.75rem;
+            top: 2rem;
+            bottom: -3rem;
+            width: 2px;
+            background-color: #FDCC62;
+        }
+        
+        .timeline-item:last-child:after {
+            display: none;
+        }
+        
+        /* Navigation Styles */
+        .nav-link {
+            @apply text-[#FEEBC0] hover:text-[#FF522D] px-3 py-2 font-medium flex items-center transition-colors duration-200;
+        }
+        
+        .nav-dropdown {
+            @apply relative group;
+        }
+        
+        .dropdown-menu {
+            @apply absolute left-0 mt-1 hidden group-hover:block bg-[#7A2B1A] rounded-md shadow-lg w-48 z-50;
+        }
+        
+        .dropdown-item {
+            @apply block px-4 py-2 text-[#FEEBC0] hover:bg-[#FF522D] transition-colors duration-200 text-sm;
+        }
+        
+        .nav-button {
+            @apply bg-[#FF522D] hover:bg-[#E04625] text-[#FEEBC0] font-medium px-4 py-2 rounded-lg flex items-center transition-all duration-200;
+        }
+        
+        /* Mobile Styles */
+        .mobile-nav-link {
+            @apply block py-2 px-3 text-[#FEEBC0] hover:bg-[#FF522D] rounded transition-colors duration-200 flex justify-between items-center;
+        }
+        
+        .mobile-dropdown-item {
+            @apply block py-2 px-3 text-[#FEEBC0] hover:bg-[#FF522D]/50 rounded transition-colors duration-200 text-sm;
+        }
+        
+        .mobile-nav-button {
+            @apply block w-full text-center bg-[#FF522D] hover:bg-[#E04625] text-[#FEEBC0] font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+        }
+        
+        .dropdown-arrow {
+            @apply transition-transform duration-200;
+        }
+        
+        details[open] .dropdown-arrow {
+            @apply transform rotate-180;
+        }
+        
+        /* Loading Screen */
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #FF522D;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background-color: #FF522D;
+            color: #FEEBC0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 99;
+        }
+        
+        .back-to-top.active {
+            opacity: 1;
+        }
+        /* Ajoutez ces styles dans votre balise <style> */
+.nav-dropdown {
+    position: relative;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 200px;
+    background-color: #7A2B1A;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+    z-index: 50;
+}
+
+.nav-dropdown:hover .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-item {
+    display: block;
+    padding: 0.75rem 1rem;
+    color: #FEEBC0;
+    font-size: 0.875rem;
+    transition: background-color 0.2s;
+    white-space: nowrap;
+}
+
+.dropdown-item:hover {
+    background-color: #FF522D;
+}
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="fixed inset-0 bg-[#641A0B] flex items-center justify-center z-[9999] transition-opacity duration-500">
+        <div class="text-center">
+            <img src="logo png/Logo-FODESE---blanc.png" alt="FODESE Logo" class="h-20 mb-4 mx-auto">
+            <div class="loader mx-auto"></div>
+            <p class="text-[#FEEBC0] mt-4">Chargement en cours...</p>
+        </div>
+    </div>
+
+    <!-- Back to Top Button -->
+    <div id="back-to-top" class="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="bg-[#7A2B1A] sticky top-0 z-50 shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between py-3">
+                <!-- Logo -->
+                <a href="acceuil.html" class="flex items-center">
+                    <img src="logo png/Logo-FODESE---blanc.png" alt="FODESE Logo" class="h-10">
+                </a>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden lg:flex items-center space-x-6">
+                    <ul class="flex items-center space-x-1">
+                        <!-- Accueil -->
+                        <li>
+                            <a href="acceuil.html" class="nav-link">ACCUEIL</a>
+                        </li>
+                        
+                        <!-- À propos -->
+                        <li class="nav-dropdown">
+                            <a href="apropos.html" class="nav-link">
+                                À PROPOS <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                            </a>
+                            <div class="dropdown-menu">
+                                <ul>
+                                    <li><a href="apropos.html#mission" class="dropdown-item">Notre mission</a></li>
+                                    <li><a href="apropos.html#valeurs" class="dropdown-item">Nos valeurs</a></li>
+                                    <li><a href="apropos.html#equipe" class="dropdown-item">Notre équipe</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        
+                        <!-- Offres -->
+                        <li class="nav-dropdown">
+                            <a href="offres.html" class="nav-link">
+                                OFFRES <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                            </a>
+                            <div class="dropdown-menu">
+                                <ul>
+                                    <li><a href="offres.html?type=stage" class="dropdown-item">Stages</a></li>
+                                    <li><a href="offres.html?type=emploi" class="dropdown-item">Emplois</a></li>
+                                    <li><a href="offres.html?type=alternance" class="dropdown-item">Alternance</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        
+                        <!-- Programmes -->
+                        <li class="nav-dropdown">
+                            <a href="programmes.html" class="nav-link">
+                                PROGRAMMES <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                            </a>
+                            <div class="dropdown-menu">
+                                <ul>
+                                    <li><a href="programmes.html#forums" class="dropdown-item">Forums</a></li>
+                                    <li><a href="programmes.html#conferences" class="dropdown-item">Conférences</a></li>
+                                    <li><a href="programmes.html#ateliers" class="dropdown-item">Ateliers</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        
+                        <!-- Autres liens simples -->
+                        <li><a href="actualites.html" class="nav-link">ACTUALITÉS</a></li>
+                        <li><a href="partenaires.html" class="nav-link">PARTENAIRES</a></li>
+                    </ul>
+                    
+                    <!-- Bouton compte -->
+                    <div class="ml-6">
+                        <a href="profi-candidat.html" class="nav-button">
+                            <i class="fas fa-user mr-2"></i> Mon compte
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Bouton menu mobile -->
+                <button id="mobile-menu-button" class="lg:hidden text-[#FEEBC0] focus:outline-none">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="lg:hidden hidden bg-[#7A2B1A] transition-all duration-300 ease-in-out">
+            <div class="container mx-auto px-4 py-3">
+                <ul class="space-y-2">
+                    <li><a href="acceuil.html" class="mobile-nav-link">ACCUEIL</a></li>
+                    
+                    <!-- À propos mobile -->
+                    <li class="mobile-nav-dropdown">
+                        <details>
+                            <summary class="mobile-nav-link">
+                                À PROPOS <i class="fas fa-chevron-down ml-1 text-xs dropdown-arrow"></i>
+                            </summary>
+                            <ul class="ml-4 mt-2 space-y-2">
+                                <li><a href="apropos.html#mission" class="mobile-dropdown-item">Notre mission</a></li>
+                                <li><a href="apropos.html#valeurs" class="mobile-dropdown-item">Nos valeurs</a></li>
+                                <li><a href="apropos.html#equipe" class="mobile-dropdown-item">Notre équipe</a></li>
+                            </ul>
+                        </details>
+                    </li>
+                    
+                    <!-- Offres mobile -->
+                    <li class="mobile-nav-dropdown">
+                        <details>
+                            <summary class="mobile-nav-link">
+                                OFFRES <i class="fas fa-chevron-down ml-1 text-xs dropdown-arrow"></i>
+                            </summary>
+                            <ul class="ml-4 mt-2 space-y-2">
+                                <li><a href="offres.html?type=stage" class="mobile-dropdown-item">Stages</a></li>
+                                <li><a href="offres.html?type=emploi" class="mobile-dropdown-item">Emplois</a></li>
+                                <li><a href="offres.html?type=alternance" class="mobile-dropdown-item">Alternance</a></li>
+                            </ul>
+                        </details>
+                    </li>
+                    
+                    <!-- Programmes mobile -->
+                    <li class="mobile-nav-dropdown">
+                        <details>
+                            <summary class="mobile-nav-link">
+                                PROGRAMMES <i class="fas fa-chevron-down ml-1 text-xs dropdown-arrow"></i>
+                            </summary>
+                            <ul class="ml-4 mt-2 space-y-2">
+                                <li><a href="programmes.html#forums" class="mobile-dropdown-item">Forums</a></li>
+                                <li><a href="programmes.html#conferences" class="mobile-dropdown-item">Conférences</a></li>
+                                <li><a href="programmes.html#ateliers" class="mobile-dropdown-item">Ateliers</a></li>
+                            </ul>
+                        </details>
+                    </li>
+                    
+                    <!-- Autres liens mobiles -->
+                    <li><a href="actualites.html" class="mobile-nav-link">ACTUALITÉS</a></li>
+                    <li><a href="partenaires.html" class="mobile-nav-link">PARTENAIRES</a></li>
+                    
+                    <!-- Bouton compte mobile -->
+                    <li class="pt-3 mt-3 border-t border-[#FF522D]">
+                        <a href="connexion.html" class="mobile-nav-button">
+                            <i class="fas fa-user mr-2"></i> Mon compte
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="bg-no-repeat bg-cover bg-center py-16 md:py-24 relative" style="background-image: url('images/Pub-Poster.jpg')">
+        <!-- Overlay pour assurer la lisibilité du texte -->
+        <div class="absolute inset-0 bg-primary bg-opacity-70"></div>
+        
+        <div class="container mx-auto px-4 text-center relative z-10">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 text-white">À propos de FODESE</h1>
+            <p class="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto text-white">Découvrez notre mission, notre vision et notre engagement pour l'emploi des jeunes</p>
+        </div>
+    </header>
+
+    <!-- Section Présentation -->
+    <section id="presentation" class="py-16 fade-in">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-primary mb-2">Présentation de FODESE</h2>
+                <div class="w-20 h-1 bg-secondary mx-auto"></div>
+            </div>
+            
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden hover-scale">
+                <div class="flex flex-col lg:flex-row">
+                    <div class="lg:w-1/2 relative">
+                        <img src="images/equipe-fodese.jpg" alt="Équipe FODESE" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent flex items-end p-6">
+                            <p class="text-light text-lg font-medium">Une équipe dédiée à votre réussite professionnelle</p>
+                        </div>
+                    </div>
+                    <div class="lg:w-1/2 p-8">
+                        <h3 class="text-2xl font-bold text-primary mb-4">Notre histoire</h3>
+                        <p class="text-gray-700 mb-6">
+                            Fondé en 2015, le Forum pour le Développement et l'Emploi des Savoirs et des Expertises (FODESE) est né d'un constat simple : 
+                            le fossé entre les formations académiques et les besoins réels du marché de l'emploi en Côte d'Ivoire.
+                        </p>
+                        <p class="text-gray-700 mb-6">
+                            Depuis lors, nous avons évolué pour devenir une plateforme incontournable, organisant des forums annuels, des ateliers de formation 
+                            et mettant en relation des milliers de jeunes diplômés avec des employeurs de premier plan.
+                        </p>
+                        
+                        <div class="grid grid-cols-2 gap-4 mb-6">
+                            <div class="bg-light/50 p-4 rounded-lg border border-accent/30 text-center">
+                                <div class="text-3xl font-bold text-primary">10K+</div>
+                                <div class="text-sm text-primary font-medium">Membres</div>
+                            </div>
+                            <div class="bg-light/50 p-4 rounded-lg border border-accent/30 text-center">
+                                <div class="text-3xl font-bold text-primary">5+</div>
+                                <div class="text-sm text-primary font-medium">Éditions</div>
+                            </div>
+                        </div>
+                        
+                        <a href="#histoire" class="inline-block bg-primary hover:bg-primary-dark text-light px-6 py-3 rounded-lg font-medium transition-all">
+                            En savoir plus sur notre histoire <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Mission -->
+    <section id="mission" class="py-16 bg-light">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-primary mb-2">Notre mission & valeurs</h2>
+                <div class="w-20 h-1 bg-secondary mx-auto"></div>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all">
+                    <div class="text-secondary text-4xl mb-4">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-primary mb-3">Notre mission</h3>
+                    <p class="text-gray-700">
+                        Connecter les talents émergents avec les opportunités professionnelles et accompagner les entreprises dans leur recherche de compétences.
+                    </p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all">
+                    <div class="text-secondary text-4xl mb-4">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-primary mb-3">Notre vision</h3>
+                    <p class="text-gray-700">
+                        Devenir le pont incontournable entre l'éducation et l'emploi en Afrique de l'Ouest d'ici 2030.
+                    </p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all">
+                    <div class="text-secondary text-4xl mb-4">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-primary mb-3">Nos valeurs</h3>
+                    <ul class="text-gray-700 list-disc pl-5 space-y-1">
+                        <li>Intégrité</li>
+                        <li>Innovation</li>
+                        <li>Collaboration</li>
+                        <li>Excellence</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Pourquoi nous rejoindre -->
+    <section id="rejoindre" class="py-16">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-primary mb-2">Pourquoi rejoindre FODESE ?</h2>
+                <div class="w-20 h-1 bg-secondary mx-auto"></div>
+                <p class="text-gray-600 mt-4 max-w-2xl mx-auto">
+                    Découvrez les avantages à faire partie de notre communauté dynamique
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all border-t-4 border-secondary">
+                    <div class="text-secondary text-3xl mb-4">
+                        <i class="fas fa-network-wired"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-primary mb-3">Réseau étendu</h3>
+                    <p class="text-gray-700">
+                        Accès à notre réseau de plus de 50 entreprises partenaires dans divers secteurs d'activité.
+                    </p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all border-t-4 border-accent">
+                    <div class="text-accent text-3xl mb-4">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-primary mb-3">Formations gratuites</h3>
+                    <p class="text-gray-700">
+                        Ateliers et séminaires sur les compétences recherchées par les employeurs.
+                    </p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all border-t-4 border-primary">
+                    <div class="text-primary text-3xl mb-4">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-primary mb-3">Opportunités ciblées</h3>
+                    <p class="text-gray-700">
+                        Offres d'emploi et de stage adaptées à votre profil et aspirations.
+                    </p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all border-t-4 border-secondary">
+                    <div class="text-secondary text-3xl mb-4">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-primary mb-3">Accompagnement</h3>
+                    <p class="text-gray-700">
+                        Coaching personnalisé pour vos candidatures et entretiens.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <a href="offres.html" class="inline-block bg-primary hover:bg-primary-dark text-light px-8 py-3 rounded-lg font-medium transition-all hover:-translate-y-1">
+                    Voir nos offres disponibles <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Éditions passées -->
+    <section id="editions" class="py-16 bg-gray-100">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-primary mb-2">Nos éditions passées</h2>
+                <div class="w-20 h-1 bg-secondary mx-auto"></div>
+                <p class="text-gray-600 mt-4 max-w-2xl mx-auto">
+                    Retour sur les moments forts de nos précédents forums
+                </p>
+            </div>
+            
+            <div class="max-w-4xl mx-auto">
+                <div class="timeline-item">
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold text-primary mb-1">Édition 2022</h3>
+                        <div class="text-secondary font-medium mb-3">"L'emploi des jeunes à l'ère du numérique"</div>
+                        <p class="text-gray-700 mb-4">
+                            Cette édition record a rassemblé plus de 2000 participants et 50 entreprises recruteuses. 
+                            Nous avons exploré les nouvelles opportunités créées par la transformation digitale.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-light text-primary text-sm px-3 py-1 rounded-full">Abidjan</span>
+                            <span class="bg-light text-primary text-sm px-3 py-1 rounded-full">25-27 Octobre</span>
+                            <span class="bg-light text-primary text-sm px-3 py-1 rounded-full">300 embauches</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold text-primary mb-1">Édition 2021</h3>
+                        <div class="text-secondary font-medium mb-3">"Les métiers d'avenir en Afrique"</div>
+                        <p class="text-gray-700 mb-4">
+                            Première édition hybride (présentiel et virtuel) avec des participants de 5 pays différents.
+                            Focus sur les secteurs porteurs comme les énergies renouvelables et l'agro-business.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-light text-primary text-sm px-3 py-1 rounded-full">Yamoussoukro</span>
+                            <span class="bg-light text-primary text-sm px-3 py-1 rounded-full">15-17 Novembre</span>
+                            <span class="bg-light text-primary text-sm px-3 py-1 rounded-full">240 embauches</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold text-primary mb-1">Édition 2020</h3>
+                        <div class="text-secondary font-medium mb-3">"L'entrepreneuriat jeune comme solution"</div>
+                        <p class="text-gray-700 mb-4">
+                            Édition spéciale COVID entièrement virtuelle avec un focus sur l'entrepreneuriat.
+                            Plus de 50 jeunes ont pu lancer leur startup grâce à notre accompagnement.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-light text-primary text-sm px-3 py-1 rounded-full">En ligne</span>
+                            <span class="bg-light text-primary text-sm px-3 py-1 rounded-full">5-7 Décembre</span>
+                            <span class="bg-light text-primary text-sm px-3 py-1 rounded-full">50 startups</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Équipe -->
+    <section id="equipe" class="py-16">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-primary mb-2">Notre équipe</h2>
+                <div class="w-20 h-1 bg-secondary mx-auto"></div>
+                <p class="text-gray-600 mt-4 max-w-2xl mx-auto">
+                    Rencontrez les passionnés qui font vivre FODESE au quotidien
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all text-center">
+                    <img src="images/team1.jpg" alt="Directeur" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-primary mb-1">XXXX XXXX</h3>
+                        <p class="text-secondary font-medium mb-3">Directeur Général</p>
+                        <p class="text-gray-600 text-sm">15 ans d'expérience dans le recrutement et l'insertion professionnelle</p>
+                        <div class="flex justify-center space-x-3 mt-4">
+                            <a href="#" class="text-primary hover:text-secondary"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" class="text-primary hover:text-secondary"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all text-center">
+                    <img src="images/team2.jpg" alt="Responsable RH" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-primary mb-1">XXXX XXXX</h3>
+                        <p class="text-secondary font-medium mb-3">Responsable RH</p>
+                        <p class="text-gray-600 text-sm">Spécialiste des relations entreprises et partenariats</p>
+                        <div class="flex justify-center space-x-3 mt-4">
+                            <a href="#" class="text-primary hover:text-secondary"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" class="text-primary hover:text-secondary"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all text-center">
+                    <img src="images/team3.jpg" alt="Coordinateur" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-primary mb-1">XXX XXX</h3>
+                        <p class="text-secondary font-medium mb-3">Coordinateur Événements</p>
+                        <p class="text-gray-600 text-sm">Organisateur des forums et ateliers de formation</p>
+                        <div class="flex justify-center space-x-3 mt-4">
+                            <a href="#" class="text-primary hover:text-secondary"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" class="text-primary hover:text-secondary"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all text-center">
+                    <img src="images/team4.jpg" alt="Community Manager" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-primary mb-1">XXX XXXX</h3>
+                        <p class="text-secondary font-medium mb-3">Community Manager</p>
+                        <p class="text-gray-600 text-sm">Gestion de la plateforme et accompagnement des candidats</p>
+                        <div class="flex justify-center space-x-3 mt-4">
+                            <a href="#" class="text-primary hover:text-secondary"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" class="text-primary hover:text-secondary"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-16 bg-accent text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold mb-6">Prêt à faire partie de notre communauté ?</h2>
+            <p class="text-xl mb-8 max-w-2xl mx-auto">
+                Que vous soyez candidat ou recruteur, rejoignez-nous dès maintenant !
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="inscription.html" class="bg-white text-primary hover:bg-gray-100 font-bold py-3 px-8 rounded-lg transition-all hover:shadow-lg">
+                    <i class="fas fa-user-plus mr-2"></i>S'inscrire
+                </a>
+                <a href="contact.html" class="border-2 border-white hover:bg-white/10 font-bold py-3 px-8 rounded-lg transition-all hover:shadow-lg">
+                    <i class="fas fa-envelope mr-2"></i>Nous contacter
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-primary text-light py-8 mt-12 fade-in">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="md:col-span-2">
+                    <img src="logo png/Logo-FODESE---blanc.png" alt="FODESE Logo" class="h-12 mb-4">
+                    <p class="text-sm">Plateforme de connexion entre talents et opportunités professionnelles.</p>
+                    <div class="flex space-x-4 mt-4">
+                        <a href="#" class="text-xl hover:text-secondary transition" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-xl hover:text-secondary transition" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-xl hover:text-secondary transition" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="text-xl hover:text-secondary transition" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-xl hover:text-secondary transition" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg mb-4">LIENS RAPIDES</h3>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="hover:text-secondary transition">Accueil</a></li>
+                        <li><a href="offres.html" class="hover:text-secondary transition">Offres de Stage</a></li>
+                        <li><a href="offres.html" class="hover:text-secondary transition">Offres d'Emploi</a></li>
+                        <li><a href="programmes.html" class="hover:text-secondary transition">Événements</a></li>
+                        <li><a href="contact.html" class="hover:text-secondary transition">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg mb-4">CONTACT</h3>
+                    <address class="not-italic">
+                        <p class="mb-2"><i class="fas fa-map-marker-alt mr-2"></i> Abidjan, Côte d'Ivoire</p>
+                        <p class="mb-2"><i class="fas fa-phone-alt mr-2"></i> +225 XX XX XX XX</p>
+                        <p class="mb-2"><i class="fas fa-envelope mr-2"></i> <a href="mailto:contact@fodese.org" class="hover:text-secondary">contact@fodese.org</a></p>
+                        <p class="mb-2"><i class="fas fa-clock mr-2"></i> Lun-Ven: 8h-17h</p>
+                    </address>
+                </div>
+            </div>
+            <div class="border-t border-secondary mt-8 pt-6 text-center text-sm">
+                <p>© 2025 FODESE - Tous droits réservés | <a href="#" class="hover:text-secondary">Mentions légales</a> | <a href="#" class="hover:text-secondary">Politique de confidentialité</a> | <a href="#" class="hover:text-secondary">Conditions d'utilisation</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Gestion du menu mobile
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            const icon = this.querySelector('i');
+            
+            // Basculer la visibilité du menu
+            menu.classList.toggle('hidden');
+            
+            // Changer l'icône
+            if (menu.classList.contains('hidden')) {
+                icon.classList.add('fa-bars');
+                document.body.style.overflow = 'auto';
+            } else {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+                document.body.style.overflow = 'hidden';
+            }
+        });
+
+        // Fermer le menu mobile quand un lien est cliqué
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('mobile-menu').classList.add('hidden');
+                document.getElementById('mobile-menu-button').querySelector('i').classList.replace('fa-times', 'fa-bars');
+                document.body.style.overflow = 'auto';
+            });
+        });
+
+        // Back to Top Button
+        const backToTopButton = document.getElementById('back-to-top');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.add('active');
+            } else {
+                backToTopButton.classList.remove('active');
+            }
+        });
+
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Loading Screen
+        window.addEventListener('load', function() {
+            const loadingScreen = document.getElementById('loading-screen');
+            // Désactive l'opacity
+            loadingScreen.classList.add('opacity-0');
+            // Cache après la fin de la transition
+            setTimeout(() => {
+                loadingScreen.classList.add('hidden');
+            }, 500);
+        });
+
+        // Animation au scroll
+        const animateOnScroll = () => {
+            const elements = document.querySelectorAll('.fade-in, .hover-scale');
+            
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const screenPosition = window.innerHeight / 1.2;
+                
+                if (elementPosition < screenPosition) {
+                    element.classList.add('animate');
+                }
+            });
+        };
+
+        window.addEventListener('scroll', animateOnScroll);
+        window.addEventListener('load', animateOnScroll);
+
+        // Smooth scrolling pour les ancres
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Fermer le menu mobile si ouvert
+                    if (!document.getElementById('mobile-menu').classList.contains('hidden')) {
+                        document.getElementById('mobile-menu').classList.add('hidden');
+                        document.getElementById('mobile-menu-button').querySelector('i').classList.replace('fa-times', 'fa-bars');
+                        document.body.style.overflow = 'auto';
+                    }
+                }
+            });
+        });
+
+        // Détection du clic en dehors du menu mobile
+        document.addEventListener('click', function(event) {
+            const mobileMenu = document.getElementById('mobile-menu');
+            const menuButton = document.getElementById('mobile-menu-button');
+            
+            if (!mobileMenu.contains(event.target) && !menuButton.contains(event.target) && !mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.add('hidden');
+                menuButton.querySelector('i').classList.replace('fa-times', 'fa-bars');
+                document.body.style.overflow = 'auto';
+            }
+        });
+    </script>
+</body>
+</html>

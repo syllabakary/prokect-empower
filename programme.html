@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programme - FODESE</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #641A0B;
+            --secondary: #FF522D;
+            --accent: #FDCC62;
+            --light: #FEEBC0;
+        }
+        
+        .bg-primary { background-color: var(--primary); }
+        .text-primary { color: var(--primary); }
+        .border-primary { border-color: var(--primary); }
+        
+        .bg-secondary { background-color: var(--secondary); }
+        .text-secondary { color: var(--secondary); }
+        .border-secondary { border-color: var(--secondary); }
+        
+        .bg-accent { background-color: var(--accent); }
+        .text-accent { color: var(--accent); }
+        
+        .bg-light { background-color: var(--light); }
+        
+        .program-card {
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--secondary);
+        }
+        
+        .program-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .btn-primary {
+            background-color: var(--secondary);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary);
+        }
+        
+        /* Navbar styles */
+        .mobile-menu {
+            display: none;
+            position: absolute;
+            top: 60px;
+            left: 0;
+            right: 0;
+            background-color: var(--primary);
+            padding: 1rem;
+            z-index: 40;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .mobile-menu.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+        
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .tab-btn.active {
+            color: var(--secondary);
+            border-bottom: 3px solid var(--secondary);
+        }
+        
+        /* Header with background image */
+        .hero-section {
+            background-image: url('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 400px;
+            position: relative;
+        }
+        
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--primary);
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-primary text-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="flex items-center">
+                    <img src="logo.png" alt="FODESE Logo" class="h-10">
+                    <span class="ml-3 text-xl font-bold">FODESE</span>
+                </a>
+                <div class="hidden md:flex space-x-6">
+                    <a href="index.html" class="hover:text-accent transition duration-300">Accueil</a>
+                    <a href="programme.html" class="font-bold text-accent border-b-2 border-accent pb-1">Programme</a>
+                    <a href="apropos.html" class="hover:text-accent transition duration-300">À propos</a>
+                    <a href="contact.html" class="hover:text-accent transition duration-300">Contact</a>
+                </div>
+                <button id="mobile-menu-button" class="md:hidden text-white focus:outline-none">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+            
+            <!-- Mobile menu -->
+            <div id="mobile-menu" class="mobile-menu rounded-b-lg">
+                <div class="flex flex-col space-y-4">
+                    <a href="index.html" class="hover:text-accent py-2 border-b border-gray-700">Accueil</a>
+                    <a href="programme.html" class="font-bold text-accent py-2 border-b border-gray-700">Programme</a>
+                    <a href="apropos.html" class="hover:text-accent py-2 border-b border-gray-700">À propos</a>
+                    <a href="contact.html" class="hover:text-accent py-2">Contact</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section with Background Image -->
+    <header class="hero-section py-20">
+        <div class="hero-overlay"></div>
+        <div class="container mx-auto px-4 text-center relative z-10">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 text-white">Notre Programme</h1>
+            <p class="text-xl md:text-2xl text-accent max-w-3xl mx-auto">Découvrez nos événements pour booster votre carrière</p>
+        </div>
+    </header>
+
+    <!-- Programme Tabs -->
+    <section class="py-16">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-wrap overflow-x-auto border-b border-gray-200 mb-8 pb-1">
+                <button class="tab-btn active px-4 md:px-6 py-3 font-medium text-base md:text-lg whitespace-nowrap" data-tab="forums">
+                    <i class="fas fa-users mr-2"></i> Forums
+                </button>
+                <button class="tab-btn px-4 md:px-6 py-3 font-medium text-base md:text-lg whitespace-nowrap" data-tab="conferences">
+                    <i class="fas fa-chalkboard-teacher mr-2"></i> Conférences
+                </button>
+                <button class="tab-btn px-4 md:px-6 py-3 font-medium text-base md:text-lg whitespace-nowrap" data-tab="conseils">
+                    <i class="fas fa-hands-helping mr-2"></i> Conseils
+                </button>
+                <button class="tab-btn px-4 md:px-6 py-3 font-medium text-base md:text-lg whitespace-nowrap" data-tab="pitch">
+                    <i class="fas fa-file-alt mr-2"></i> Pitch ton CV
+                </button>
+            </div>
+
+            <!-- Forums Content -->
+            <div id="forums" class="tab-content active">
+                <h2 class="text-3xl font-bold text-primary mb-8">Forums Emploi & Stages</h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                     <!-- Forum Card 6 - Abidjan -->
+                     <div class="program-card bg-white rounded-lg overflow-hidden shadow-md">
+                        <img src="images/forum-abidjan.jpg" alt="Forum Abidjan Avenir" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-xl font-bold text-primary">Forum Abidjan</h3>
+                                <span class="bg-accent text-primary text-sm px-2 py-1 rounded">Gratuit</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">Spécial insertion professionnelle pour jeunes diplômés</p>
+                            <div class="flex items-center text-sm text-gray-500 mb-3">
+                                <i class="fas fa-calendar-alt mr-2"></i>
+                                <span>1 Mars 2024</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-500 mb-4">
+                                <i class="fas fa-map-marker-alt mr-2"></i>
+                                <span>Palais de la Culture, Treichville</span>
+                            </div>
+                            <a href="#" class="btn-primary inline-block w-full text-center py-2 rounded-md">
+                                S'inscrire <i class="fas fa-arrow-right ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                   
+                    <!-- Forum Card 4 - Korhogo -->
+                    <div class="program-card bg-white rounded-lg overflow-hidden shadow-md">
+                        <img src="images/forum-korhogo.jpg" alt="Forum Korhogo" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-xl font-bold text-primary">Forum Korhogo</h3>
+                                <span class="bg-accent text-primary text-sm px-2 py-1 rounded">Gratuit</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">Opportunités d'emploi et stages dans la région nord</p>
+                            <div class="flex items-center text-sm text-gray-500 mb-3">
+                                <i class="fas fa-calendar-alt mr-2"></i>
+                                <span>5 Février 2024</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-500 mb-4">
+                                <i class="fas fa-map-marker-alt mr-2"></i>
+                                <span>Centre Culturel, Korhogo</span>
+                            </div>
+                            <a href="#" class="btn-primary inline-block w-full text-center py-2 rounded-md">
+                                S'inscrire <i class="fas fa-arrow-right ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Forum Card 5 - Yamoussoukro -->
+                    <div class="program-card bg-white rounded-lg overflow-hidden shadow-md">
+                        <img src="images/forum-yamoussoukro.jpg" alt="Forum Yamoussoukro" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-xl font-bold text-primary">Forum Yamoussoukro</h3>
+                                <span class="bg-accent text-primary text-sm px-2 py-1 rounded">Gratuit</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">Rencontrez les grands employeurs de la capitale politique</p>
+                            <div class="flex items-center text-sm text-gray-500 mb-3">
+                                <i class="fas fa-calendar-alt mr-2"></i>
+                                <span>15 Février 2024</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-500 mb-4">
+                                <i class="fas fa-map-marker-alt mr-2"></i>
+                                <span>Fondation Houphouët-Boigny, Yamoussoukro</span>
+                            </div>
+                            <a href="#" class="btn-primary inline-block w-full text-center py-2 rounded-md">
+                                S'inscrire <i class="fas fa-arrow-right ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Forum Card 7 - Bouaké -->
+                    <div class="program-card bg-white rounded-lg overflow-hidden shadow-md">
+                        <img src="images/forum-bouake.jpg" alt="Forum Bouaké Avenir" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-xl font-bold text-primary">Forum Bouaké Avenir</h3>
+                                <span class="bg-accent text-primary text-sm px-2 py-1 rounded">Gratuit</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">Découvrez les opportunités dans la région du Gbêkê</p>
+                            <div class="flex items-center text-sm text-gray-500 mb-3">
+                                <i class="fas fa-calendar-alt mr-2"></i>
+                                <span>20 Mars 2024</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-500 mb-4">
+                                <i class="fas fa-map-marker-alt mr-2"></i>
+                                <span>Université Alassane Ouattara, Bouaké</span>
+                            </div>
+                            <a href="#" class="btn-primary inline-block w-full text-center py-2 rounded-md">
+                                S'inscrire <i class="fas fa-arrow-right ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Conférences Content -->
+            <div id="conferences" class="tab-content">
+                <h2 class="text-3xl font-bold text-primary mb-8">Conférences Inspirantes</h2>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Conférence Card 1 -->
+                    <div class="program-card bg-white rounded-lg overflow-hidden shadow-md">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-primary mb-3">L'entrepreneuriat en Afrique</h3>
+                            <div class="flex items-center text-sm text-secondary mb-2">
+                                <i class="fas fa-user-tie mr-2"></i>
+                                <span>Par Dr. Koffi N'Guessan</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">Découvrez comment lancer votre entreprise en Afrique avec succès malgré les défis</p>
+                            <div class="flex items-center text-sm text-gray-500 mb-3">
+                                <i class="fas fa-calendar-alt mr-2"></i>
+                                <span>10 Novembre 2023 | 14h-16h</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-500 mb-4">
+                                <i class="fas fa-map-marker-alt mr-2"></i>
+                                <span>Amphi A, Université FHB</span>
+                            </div>
+                            <a href="#" class="btn-primary inline-block w-full text-center py-2 rounded-md">
+                                Réserver <i class="fas fa-arrow-right ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Conférence Card 2 -->
+                    <div class="program-card bg-white rounded-lg overflow-hidden shadow-md">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-primary mb-3">Les métiers de demain</h3>
+                            <div class="flex items-center text-sm text-secondary mb-2">
+                                <i class="fas fa-user-tie mr-2"></i>
+                                <span>Par Mme Aminata Koné</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">Quelles compétences développer pour les emplois de 2030 en Afrique</p>
+                            <div class="flex items-center text-sm text-gray-500 mb-3">
+                                <i class="fas fa-calendar-alt mr-2"></i>
+                                <span>25 Novembre 2023 | 10h-12h</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-500 mb-4">
+                                <i class="fas fa-map-marker-alt mr-2"></i>
+                                <span>Espace Latrille, Cocody</span>
+                            </div>
+                            <a href="#" class="btn-primary inline-block w-full text-center py-2 rounded-md">
+                                Réserver <i class="fas fa-arrow-right ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Conseils Content -->
+            <div id="conseils" class="tab-content">
+                <h2 class="text-3xl font-bold text-primary mb-8">Séances de Conseil</h2>
+                <div class="bg-white rounded-lg shadow-md p-8 mb-8">
+                    <h3 class="text-2xl font-bold text-primary mb-4">Coaching Personnalisé</h3>
+                    <p class="text-gray-700 mb-6">Nos experts vous accompagnent dans votre recherche d'emploi ou votre projet entrepreneurial</p>
+                    
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <!-- Conseil 1 -->
+                        <div class="border border-accent rounded-lg p-4">
+                            <div class="text-secondary text-3xl mb-3">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                            <h4 class="font-bold text-primary mb-2">CV et Lettre de motivation</h4>
+                            <p class="text-gray-600 text-sm">Optimisez vos documents de candidature</p>
+                            <a href="#" class="text-secondary text-sm font-medium mt-2 inline-block">Prendre RDV</a>
+                        </div>
+
+                        <!-- Conseil 2 -->
+                        <div class="border border-accent rounded-lg p-4">
+                            <div class="text-secondary text-3xl mb-3">
+                                <i class="fas fa-handshake"></i>
+                            </div>
+                            <h4 class="font-bold text-primary mb-2">Simulation d'entretien</h4>
+                            <p class="text-gray-600 text-sm">Préparez-vous aux entretiens d'embauche</p>
+                            <a href="#" class="text-secondary text-sm font-medium mt-2 inline-block">Prendre RDV</a>
+                        </div>
+
+                        <!-- Conseil 3 -->
+                        <div class="border border-accent rounded-lg p-4">
+                            <div class="text-secondary text-3xl mb-3">
+                                <i class="fas fa-lightbulb"></i>
+                            </div>
+                            <h4 class="font-bold text-primary mb-2">Orientation professionnelle</h4>
+                            <p class="text-gray-600 text-sm">Trouvez votre voie professionnelle</p>
+                            <a href="#" class="text-secondary text-sm font-medium mt-2 inline-block">Prendre RDV</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pitch ton CV Content -->
+            <div id="pitch" class="tab-content">
+                <h2 class="text-3xl font-bold text-primary mb-8">Pitch ton CV</h2>
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <div class="md:flex">
+                        <div class="md:w-1/2 bg-accent p-8 flex items-center">
+                            <div>
+                                <h3 class="text-2xl font-bold text-primary mb-4">Présentez-vous en 2 minutes chrono !</h3>
+                                <p class="text-primary mb-6">Une opportunité unique de vous vendre devant un panel de recruteurs et décideurs.</p>
+                                <ul class="space-y-3 text-primary">
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check-circle text-secondary mr-2 mt-1"></i>
+                                        <span>Formation gratuite au pitch</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check-circle text-secondary mr-2 mt-1"></i>
+                                        <span>Feedback immédiat des experts</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check-circle text-secondary mr-2 mt-1"></i>
+                                        <span>Opportunités d'embauche</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="md:w-1/2 p-8">
+                            <h4 class="text-xl font-bold text-primary mb-4">Prochaines sessions</h4>
+                            <div class="space-y-4 mb-6">
+                                <div class="border-b border-gray-200 pb-4">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <span class="font-medium text-primary">Session Décembre 2023</span>
+                                        <span class="bg-secondary text-white text-xs px-2 py-1 rounded">5 places restantes</span>
+                                    </div>
+                                    <p class="text-sm text-gray-600">15 Décembre 2023 | 9h-12h</p>
+                                </div>
+                                <div class="border-b border-gray-200 pb-4">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <span class="font-medium text-primary">Session Janvier 2024</span>
+                                        <span class="bg-secondary text-white text-xs px-2 py-1 rounded">Complet</span>
+                                    </div>
+                                    <p class="text-sm text-gray-600">12 Janvier 2024 | 9h-12h</p>
+                                </div>
+                            </div>
+                            <a href="#" class="btn-primary inline-block w-full text-center py-3 rounded-md font-bold">
+                                <i class="fas fa-microphone-alt mr-2"></i> S'inscrire au pitch
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-16 bg-accent">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold mb-6 text-primary">Prêt à booster votre carrière ?</h2>
+            <p class="text-xl mb-8 max-w-2xl mx-auto text-primary">
+                Inscrivez-vous dès maintenant à nos prochains événements
+            </p>
+            <a href="#" class="bg-primary text-white hover:bg-opacity-90 font-bold py-3 px-8 rounded-lg inline-block transition duration-300">
+                <i class="fas fa-calendar-check mr-2"></i> Participer Gratuitement
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-primary text-light py-8">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div class="md:col-span-2">
+                    <img src="logo.png" alt="FODESE Logo" class="h-12 mb-4">
+                    <p class="text-sm">Plateforme de connexion entre talents et opportunités professionnelles.</p>
+                    <div class="flex space-x-4 mt-4">
+                        <a href="#" class="text-xl hover:text-accent transition duration-300"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-xl hover:text-accent transition duration-300"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-xl hover:text-accent transition duration-300"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="text-xl hover:text-accent transition duration-300"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg mb-4">Liens rapides</h3>
+                    <ul class="space-y-2">
+                        <li><a href="acceuil.html" class="hover:text-accent transition duration-300">Accueil</a></li>
+                        <li><a href="programme.html" class="hover:text-accent transition duration-300">Programme</a></li>
+                        <li><a href="apropos.html" class="hover:text-accent transition duration-300">À propos</a></li>
+                        <li><a href="contact.html" class="hover:text-accent transition duration-300">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg mb-4">Contact</h3>
+                    <address class="not-italic">
+                        <p class="mb-2"><i class="fas fa-map-marker-alt mr-2"></i> Abidjan, Côte d'Ivoire</p>
+                        <p class="mb-2"><i class="fas fa-phone-alt mr-2"></i> +225 XX XX XX XX</p>
+                        <p class="mb-2"><i class="fas fa-envelope mr-2"></i> contact@fodese.org</p>
+                    </address>
+                </div>
+            </div>
+            <div class="border-t border-secondary mt-8 pt-6 text-center text-sm">
+                <p>© 2023 FODESE - Tous droits réservés</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Tab functionality
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tabId = btn.getAttribute('data-tab');
+                
+                // Remove active class from all buttons and contents
+                tabBtns.forEach(btn => btn.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+                
+                // Add active class to clicked button and corresponding content
+                btn.classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('show');
+            // Change icon based on menu state
+            const icon = mobileMenuButton.querySelector('i');
+            if (mobileMenu.classList.contains('show')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+        
+        // Hide mobile menu on window resize if screen becomes larger
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 768 && mobileMenu.classList.contains('show')) {
+                mobileMenu.classList.remove('show');
+                const icon = mobileMenuButton.querySelector('i');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+    </script>
+</body>
+</html>
